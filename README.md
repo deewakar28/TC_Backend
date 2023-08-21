@@ -4,10 +4,16 @@
 
 Use the latest version of node -> `v19.6.1`
 
-Run the command to install all the dependencies:
+Step 1: Clone the repository
+
+```bash
+git clone https://github.com/NITRR-Technocracy/TC_Backend.git
+```
+
+Step 2: Go to the project directory and run the command to install all the dependencies:
 
 `npm install`
 
-To start the server locally:
+Step 4: To start the server locally:
 
 `npm start`
