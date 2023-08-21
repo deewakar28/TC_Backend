@@ -12,8 +12,12 @@ git clone https://github.com/NITRR-Technocracy/TC_Backend.git
 
 Step 2: Go to the project directory and run the command to install all the dependencies:
 
-`npm install`
+```bash
+npm install
+```
 
 Step 4: To start the server locally:
 
-`npm start`
+```bash
+npm start
+```
