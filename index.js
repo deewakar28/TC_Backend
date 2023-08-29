@@ -1,29 +1,34 @@
 const express = require("express");
-const mongoose = require("mongoose");
-const env = require("dotenv");
 const cors = require("cors");
-env.config();
-const postRoutes = require("./routes/post");
+const bodyParser = require('body-parser')
+const { MongoClient } = require("mongodb");
+const eventRegRoutes = require('./routes/eventRegRoutes')
+const { connectToDatabase } = require('./db/conn')
 const app = express();
-const port = 5000;
-app.use(express.json());
-app.use(postRoutes);
+require('dotenv').config();
+
 app.use(cors());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json())
+app.use(bodyParser.json())
 
-mongoose.connect(process.env.DBURL, { dbName: "Aavartan2023" });
-const db = mongoose.connection;
-db.on("error", (err) => {
-  console.log(err);
-});
-db.once("open", () => {
-  console.log("Connected to Database!");
-});
+connectToDatabase()
+  .then((db) => {
+    app.use((req, res, next) => {
+      req.db = db;
+      next();
+    });
+    
+    app.get("/server", (req, res) => {
+      res.send("Server running successfully");
+    });
+    
+    app.use(eventRegRoutes)
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
-
-app.listen(port || process.env.PORT, () => {
-  console.log(`Server running on port ${port}`);
-});
+    const PORT = 5000;
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  })
+  .catch((error) => {
+    console.error('Error connecting to the database:', error);
+  });
