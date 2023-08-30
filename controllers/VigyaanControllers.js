@@ -1,7 +1,6 @@
 const admin = require('firebase-admin')
 const serviceAccount = require('../utils/technocracy-firebase.json')
 require('dotenv').config()
-
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   storageBucket: 'technocracy-97aab.appspot.com',
