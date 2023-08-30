@@ -1,5 +1,9 @@
 const admin = require('firebase-admin')
 const serviceAccount = require('../utils/technocracy-firebase.json')
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  storageBucket: 'technocracy-97aab.appspot.com',
+})
 require('dotenv').config()
 
 const vigyaanAbstract = async (req, res) => {
@@ -17,11 +21,6 @@ const vigyaanAbstract = async (req, res) => {
   }
   try {
     if (present) {
-      admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount),
-        storageBucket: 'technocracy-97aab.appspot.com',
-      })
-
       const bucket = admin.storage().bucket()
       const folderPath = `${process.env.DB}/Vigyaan/Teams/${data.Team_name}/`
       const fileName = `${file.originalname}`
