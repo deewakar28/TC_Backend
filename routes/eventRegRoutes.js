@@ -1,8 +1,12 @@
 const { Router } = require("express");
-const {vigyanReg} = require("../controllers/eventRegControllers")
+const { vigyaanReg, vigyaanAbstract } = require("../controllers/eventRegControllers")
+const multer = require('multer')
 
+const storage = multer.memoryStorage()
+const upload = multer({ storage })
 const router = Router()
 
-router.post('/server/vigyanReg', vigyanReg)
+router.post('/server/vigyaanReg', vigyaanReg)
+router.post('/server/vigyaanAbstract', upload.single('file'), vigyaanAbstract)
 
 module.exports = router
