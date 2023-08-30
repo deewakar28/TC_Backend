@@ -23,7 +23,7 @@ const vigyaanAbstract = async (req, res) => {
       })
 
       const bucket = admin.storage().bucket()
-      const folderPath = `${process.env.DB}/Vigyaan/${data.Team_name}/`
+      const folderPath = `${process.env.DB}/Vigyaan/Teams/${data.Team_name}/`
       const fileName = `${file.originalname}`
       const fileUpload = bucket.file(`${folderPath}${fileName}`)
 
