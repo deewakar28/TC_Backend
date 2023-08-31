@@ -6,69 +6,39 @@ admin.initializeApp({
   storageBucket: 'technocracy-97aab.appspot.com',
 })
 
-const vigyaanAbstract = async (req, res) => {
-  const data = req.body
-  const db = req.db
-  const collection = db.collection('vigyaan_registration')
-  const present = await collection.findOne({ "Team_name": data.Team_name })
-  const file = req.file
-
-  if (!file) {
-    if (present) {
-      await collection.deleteOne({ "_id": present._id });
-    }
-    return res.status(400).json({ ok: false, message: 'No file uploaded.' })
-  }
-  try {
-    if (present) {
-      const bucket = admin.storage().bucket()
-      const folderPath = `${process.env.DB}/Vigyaan/Teams/${data.Team_name}/`
-      const fileName = `${file.originalname}`
-      const fileUpload = bucket.file(`${folderPath}${fileName}`)
-
-      await fileUpload.save(file.buffer, {
-        contentType: file.mimetype,
-      })
-
-      const [url] = await fileUpload.getSignedUrl({
-        action: 'read',
-        expires: '03-09-2024',
-      })
-
-      const update = {
-        $set: {
-          'Abstract': url
-        }
-      }
-
-      const updateResult = await collection.updateOne({ "Team_name": data.Team_name }, update)
-      if (updateResult.modifiedCount === 1) {
-        res.status(200).json({ ok: true, message: "Abstract submitted" })
-      }
-      else {
-        if (present) {
-          await collection.deleteOne({ "_id": present._id });
-        }
-        res.status(400).json({ ok: true, message: "Couldn't submit the abstract" })
-      }
-    }
-    else {
-      res.status(403).json({ ok: false, message: "No such team present" })
-    }
-  }
-  catch (err) {
-    if (present) {
-      await collection.deleteOne({ "_id": present._id });
-    }
-    res.status(500).json({ ok: false, message: "Internal Server Error", error: err })
-  }
-}
-
 const vigyaanReg = async (req, res) => {
+  const file = req.file
   const data = req.body
   const db = req.db
   delete data.file
+  const collection = db.collection('vigyaan_registration')
 
+  if (!file) {
+    return res.status(400).json({ ok: false, message: 'No file uploaded.' })
+  }
+
+  // uploading the abstract file to firebase storage
+  try {
+    const bucket = admin.storage().bucket()
+    const folderPath = `${process.env.DB}/Vigyaan/Teams/${data.Team_name}/`
+    const fileName = `${file.originalname}`
+    const fileUpload = bucket.file(`${folderPath}${fileName}`)
+
+    await fileUpload.save(file.buffer, {
+      contentType: file.mimetype,
+    })
+
+    const [url] = await fileUpload.getSignedUrl({
+      action: 'read',
+      expires: '03-09-2024',
+    })
+    data['Abstract'] = url
+  }
+  catch (err) {
+    return res.status(500).json({ ok: false, message: "Error uploading abstract", error: err })
+  }
+
+  // saving the team data to mongodb
   try {
     const collection = db.collection("vigyaan_registration")
     const already = await collection.findOne({ "Team_name": data.Team_name })
@@ -115,7 +85,7 @@ async function checkPrefixExistence(bucket, prefix) {
   return files.length > 0;
 }
 
-const changeFile = async (req, res) => {
+const changeVigyaanFile = async (req, res) => {
   const { branch, password } = req.body
   if (password !== process.env.PASSWORD) {
     return res.status(401).json({ ok: false, message: "Wrong Password" })
@@ -164,4 +134,4 @@ const changeFile = async (req, res) => {
   }
 }
 
-module.exports = { vigyaanReg, vigyaanAbstract, getFileURL, changeFile }
+module.exports = { vigyaanReg, getFileURL, changeVigyaanFile }
