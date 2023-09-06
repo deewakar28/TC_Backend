@@ -38,7 +38,7 @@ const vigyaanReg = async (req, res) => {
   }
 
   if (!(await isValidProblem(data.Problem_code, codes))) {
-    return res.status(400).json({ok: false, message: 'Invalid problem code'})
+    return res.status(400).json({ok: false, message: 'Invalid problem code. Please check cases.'})
   }
 
   if (!file) {
