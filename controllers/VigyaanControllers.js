@@ -6,12 +6,32 @@ admin.initializeApp({
   storageBucket: 'technocracy-97aab.appspot.com',
 })
 
+async function check(number, collection) {
+  const c1 = await collection.findOne({"Leader_whatsapp": number})
+  const c2 = await collection.findOne({"Member2_whatsapp": number})
+  const c3 = await collection.findOne({"Member3_whatsapp": number})
+  console.log(c1)
+  console.log(c2)
+  console.log(c3)
+  return ((c1 == null) && (c2 == null) && (c3 == null))
+}
+
 const vigyaanReg = async (req, res) => {
   const file = req.file
   const data = req.body
   const db = req.db
   delete data.file
   const collection = db.collection('vigyaan_registration')
+
+  if (!(await check(data.Leader_whatsapp, collection))) {
+    return res.status(400).json({ok: false, message: 'Leader is already in a team'})
+  }
+  if (!(await check(data.Member2_whatsapp, collection))) {
+    return res.status(400).json({ok: false, message: 'Member 2 is already in a team'})
+  }
+  if (!(await check(data.Member3_whatsapp, collection))) {
+    return res.status(400).json({ok: false, message: 'Member 3 is already in a team'})
+  }
 
   if (!file) {
     return res.status(400).json({ ok: false, message: 'No file uploaded.' })
