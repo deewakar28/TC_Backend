@@ -15,7 +15,6 @@ async function check_number_presence(number, collection) {
 
 async function isValidProblem(problem, codes) {
   const data = await codes.findOne({"Code": problem})
-  console.log(data)
   return data !== null
 }
 
@@ -26,6 +25,12 @@ const vigyaanReg = async (req, res) => {
   delete data.file
   const collection = db.collection('vigyaan_registration')
   const codes = db.collection('vigyaan_problem_codes')
+
+  data.Team_key = data.Team_name.toUpperCase()
+  var specialCharacterPattern = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\|/]/
+  if (specialCharacterPattern.test(data.Team_name)) {
+    return res.status(400).json({ok: false, message: "Team name can't contain special characters"})
+  }
 
   if (!(await check_number_presence(data.Leader_whatsapp, collection))) {
     return res.status(400).json({ok: false, message: 'Leader is already in a team'})
@@ -48,7 +53,7 @@ const vigyaanReg = async (req, res) => {
   // uploading the abstract file to firebase storage
   try {
     const bucket = admin.storage().bucket()
-    const folderPath = `${process.env.DB}/Vigyaan/Teams/${data.Team_name}/`
+    const folderPath = `${process.env.DB}/Vigyaan/Abstracts/${data.Team_key}/`
     const fileName = `${file.originalname}`
     const fileUpload = bucket.file(`${folderPath}${fileName}`)
 
@@ -69,7 +74,7 @@ const vigyaanReg = async (req, res) => {
   // saving the team data to mongodb
   try {
     const collection = db.collection("vigyaan_registration")
-    const already = await collection.findOne({ "Team_name": data.Team_name })
+    const already = await collection.findOne({ "Team_key": data.Team_key })
     if (!already) {
       await collection.insertOne(data)
       const present = await collection.findOne(data)
