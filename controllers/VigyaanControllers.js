@@ -41,52 +41,52 @@ const vigyaanReg = async (req, res) => {
     return res.status(400).json({ok: false, message: 'Invalid problem code'})
   }
 
-  // if (!file) {
-  //   return res.status(400).json({ ok: false, message: 'No file uploaded.' })
-  // }
+  if (!file) {
+    return res.status(400).json({ ok: false, message: 'No file uploaded.' })
+  }
 
-  // // uploading the abstract file to firebase storage
-  // try {
-  //   const bucket = admin.storage().bucket()
-  //   const folderPath = `${process.env.DB}/Vigyaan/Teams/${data.Team_name}/`
-  //   const fileName = `${file.originalname}`
-  //   const fileUpload = bucket.file(`${folderPath}${fileName}`)
+  // uploading the abstract file to firebase storage
+  try {
+    const bucket = admin.storage().bucket()
+    const folderPath = `${process.env.DB}/Vigyaan/Teams/${data.Team_name}/`
+    const fileName = `${file.originalname}`
+    const fileUpload = bucket.file(`${folderPath}${fileName}`)
 
-  //   await fileUpload.save(file.buffer, {
-  //     contentType: file.mimetype,
-  //   })
+    await fileUpload.save(file.buffer, {
+      contentType: file.mimetype,
+    })
 
-  //   const [url] = await fileUpload.getSignedUrl({
-  //     action: 'read',
-  //     expires: '03-09-2024',
-  //   })
-  //   data['Abstract'] = url
-  // }
-  // catch (err) {
-  //   return res.status(500).json({ ok: false, message: "Error uploading abstract", error: err })
-  // }
+    const [url] = await fileUpload.getSignedUrl({
+      action: 'read',
+      expires: '03-09-2024',
+    })
+    data['Abstract'] = url
+  }
+  catch (err) {
+    return res.status(500).json({ ok: false, message: "Error uploading abstract", error: err })
+  }
 
-  // // saving the team data to mongodb
-  // try {
-  //   const collection = db.collection("vigyaan_registration")
-  //   const already = await collection.findOne({ "Team_name": data.Team_name })
-  //   if (!already) {
-  //     await collection.insertOne(data)
-  //     const present = await collection.findOne(data)
-  //     if (present) {
-  //       res.status(200).json({ ok: true, message: "Registered Successfully" })
-  //     }
-  //     else {
-  //       res.status(400).json({ ok: false, message: "Couldn't register" })
-  //     }
-  //   }
-  //   else {
-  //     res.status(200).json({ ok: false, message: "The Team name is already taken" })
-  //   }
-  // }
-  // catch (err) {
-  //   res.status(500).json({ ok: false, message: "Internal Server Error", error: err })
-  // }
+  // saving the team data to mongodb
+  try {
+    const collection = db.collection("vigyaan_registration")
+    const already = await collection.findOne({ "Team_name": data.Team_name })
+    if (!already) {
+      await collection.insertOne(data)
+      const present = await collection.findOne(data)
+      if (present) {
+        res.status(200).json({ ok: true, message: "Registered Successfully" })
+      }
+      else {
+        res.status(400).json({ ok: false, message: "Couldn't register" })
+      }
+    }
+    else {
+      res.status(200).json({ ok: false, message: "The Team name is already taken" })
+    }
+  }
+  catch (err) {
+    res.status(500).json({ ok: false, message: "Internal Server Error", error: err })
+  }
 }
 
 const getFileURL = async (req, res) => {
