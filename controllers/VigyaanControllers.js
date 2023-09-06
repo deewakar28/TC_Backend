@@ -33,7 +33,7 @@ const vigyaanReg = async (req, res) => {
   if (!(await check_number_presence(data.Member2_whatsapp, collection))) {
     return res.status(400).json({ok: false, message: 'Member 2 is already in a team'})
   }
-  if (!(await check_number_presence(data.Member3_whatsapp, collection))) {
+  if (data.Member3_whatsapp !== "" && !(await check_number_presence(data.Member3_whatsapp, collection))) {
     return res.status(400).json({ok: false, message: 'Member 3 is already in a team'})
   }
 
