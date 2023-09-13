@@ -19,7 +19,7 @@ jobs:
     - name: Generate PEM
       run: echo "$PEM" >> techno.pem && chmod 400 techno.pem
       env:
-        PEM: ${{secrets.PEM}}
+        PEM: ${{vars.PEM}}
 
     - name: Doing the magic now
       run: ssh -i techno.pem ec2-user@ec2-3-111-170-203.ap-south-1.compute.amazonaws.com "cd TC_Backend && git pull && npm install && pm2 restart 0 && sudo systemctl restart nginx"
