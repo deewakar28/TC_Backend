@@ -2,12 +2,14 @@ const TerrainTreader = async (db, data, res) => {
   try {
     const collection = db.collection('terrainTreader_registration');
     const present = await collection.findOne({ "Team_name": data['Team_name'] });
-    if (!present) {
+    const present1 = await collection.findOne({ "Leader_whatsapp": data['Leader_whatsapp'] });
+    if (!present && !present1) {
       await collection.insertOne(data);
       return res.status(200).json({ ok: true, message: "Registered Successfully" })
     }
     else {
-      return res.status(400).json({ ok: false, message: "Team name is already taken" })
+      if (present) return res.status(400).json({ ok: false, message: "Team name is already taken" })
+      return res.status(400).json({ ok: false, message: "Member with same whatsapp number exists" })
     }
   }
   catch (error) {
