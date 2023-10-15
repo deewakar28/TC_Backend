@@ -3,6 +3,7 @@ const cors = require("cors");
 const bodyParser = require('body-parser')
 const { MongoClient } = require("mongodb");
 const VigyaanRoutes = require('./routes/VigyaanRoutes')
+const EventRoutes = require('./routes/EventRoutes')
 const { connectToDatabase } = require('./db/conn')
 const app = express();
 require('dotenv').config();
@@ -17,12 +18,13 @@ connectToDatabase()
       req.db = db;
       next();
     });
-    
+
     app.get("/server", (req, res) => {
       res.send("Server running successfully");
     });
-    
+
     app.use(VigyaanRoutes)
+    app.use(EventRoutes)
 
     const PORT = 5000;
     app.listen(PORT, () => {
