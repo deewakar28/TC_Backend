@@ -20,7 +20,7 @@ connectToDatabase()
     });
 
     app.get("/server", (req, res) => {
-      res.send("Server running successfully");
+      res.send("Hi, I am the server, the most powerful.");
     });
 
     app.use(VigyaanRoutes)
