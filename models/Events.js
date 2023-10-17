@@ -23,6 +23,11 @@ const RoboSoccerSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+  Leader_yog: {
+    type: String,
+    required: true,
+    trim: true
+  },
 });
 
 const RoboSoccerModel = mongoose.model("RoboSoccer", RoboSoccerSchema, "RoboSoccer_registration");
