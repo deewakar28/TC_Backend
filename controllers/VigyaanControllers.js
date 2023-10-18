@@ -1,11 +1,3 @@
-require('dotenv').config()
-const admin = require('firebase-admin')
-const serviceAccount = require(process.env.FIREBASE_LOCATION)
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  storageBucket: 'technocracy-97aab.appspot.com',
-})
-
 async function check_number_presence(number, collection) {
   const c1 = await collection.findOne({"Leader_whatsapp": number})
   const c2 = await collection.findOne({"Member2_whatsapp": number})
@@ -29,29 +21,30 @@ const vigyaanReg = async (req, res) => {
   data.Team_key = data.Team_name.toUpperCase()
   var specialCharacterPattern = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\|/]/
   if (specialCharacterPattern.test(data.Team_name)) {
-    return res.status(400).json({ok: false, message: "Team name can't contain special characters"})
+    return res.status(405).json({ok: false, message: "Team name can't contain special characters"})
   }
 
   if (!(await check_number_presence(data.Leader_whatsapp, collection))) {
-    return res.status(400).json({ok: false, message: 'Leader is already in a team'})
+    return res.status(405).json({ok: false, message: 'Leader is already in a team'})
   }
   if (!(await check_number_presence(data.Member2_whatsapp, collection))) {
-    return res.status(400).json({ok: false, message: 'Member 2 is already in a team'})
+    return res.status(405).json({ok: false, message: 'Member 2 is already in a team'})
   }
   if (data.Member3_whatsapp !== "" && !(await check_number_presence(data.Member3_whatsapp, collection))) {
-    return res.status(400).json({ok: false, message: 'Member 3 is already in a team'})
+    return res.status(405).json({ok: false, message: 'Member 3 is already in a team'})
   }
 
   if (!(await isValidProblem(data.Problem_code, codes))) {
-    return res.status(400).json({ok: false, message: 'Invalid problem code. Please check cases.'})
+    return res.status(405).json({ok: false, message: 'Invalid problem code. Please check cases.'})
   }
 
   if (!file) {
-    return res.status(400).json({ ok: false, message: 'No file uploaded.' })
+    return res.status(405).json({ ok: false, message: 'No file uploaded.' })
   }
 
   // uploading the abstract file to firebase storage
   try {
+    const admin = req.admin;
     const bucket = admin.storage().bucket()
     const folderPath = `${process.env.DB}/Vigyaan/Abstracts/${data.Team_key}/`
     const fileName = `${file.originalname}`

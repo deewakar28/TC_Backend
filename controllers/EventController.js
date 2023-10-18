@@ -1,4 +1,4 @@
-const { RoboSoccerModel } = require("../models/Events");
+const { RoboSoccerModel, BGMIModel } = require("../models/Events");
 
 const TerrainTreader = async (db, data, res) => {
   try {
@@ -25,20 +25,110 @@ const RoboSoccer = async (db, data, res) => {
     await formData.validate()
 
     const coll = db.collection('RoboSoccer_registration');
-    const teamNamePresent = await coll.findOne({"Team_name": data.Team_name});
+    const teamNamePresent = await coll.findOne({ "Team_name": data.Team_name });
     if (teamNamePresent) {
       return res.status(400).json({ ok: false, message: "Team name is already taken" });
     }
-    const leaderPresent = await coll.findOne({"Leader_whatsapp": data.Leader_whatsapp});
+    const leaderPresent = await coll.findOne({ "Leader_whatsapp": data.Leader_whatsapp });
     if (leaderPresent) {
       return res.status(400).json({ ok: false, message: "Member with same whatsapp number exists" });
     }
     const result = await coll.insertOne(formData.toObject());
     if (result.acknowledged) {
-      return res.status(200).json({ok: true, message: "Registered Successfully"});
+      return res.status(200).json({ ok: true, message: "Registered Successfully" });
     }
     else {
-      return res.status(400).json({ok: false, message: "Couldn't Register"});
+      return res.status(400).json({ ok: false, message: "Couldn't Register" });
+    }
+  }
+  catch (error) {
+    return res.status(500).json({ ok: false, message: "Internal Server Error", error: error })
+  }
+}
+
+async function check_number_presence(number, collection) {
+  const c1 = await collection.findOne({ "Leader_whatsapp": number })
+  const c2 = await collection.findOne({ "P2_number": number })
+  const c3 = await collection.findOne({ "P3_number": number })
+  const c4 = await collection.findOne({ "P4_number": number })
+  const c5 = await collection.findOne({ "P5_number": number })
+  return ((c1 == null) && (c2 == null) && (c3 == null) && (c4 == null) && (c5 == null))
+}
+
+const register_bgmi = async (req, res) => {
+  const db = req.db
+  const admin = req.admin;
+  const data = req.body;
+  const file = req.file;
+  const coll = db.collection("BGMI_Registration");
+  delete data.file;
+
+  data.Team_key = data.Team_name.toUpperCase()
+  var specialCharacterPattern = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\|/]/
+  if (specialCharacterPattern.test(data.Team_name)) {
+    return res.status(405).json({ ok: false, message: "Team name can't contain special characters" })
+  }
+
+  const teamNamePresent = await coll.findOne({ "Team_key": data.Team_key });
+  if (teamNamePresent) {
+    return res.status(405).json({ ok: false, message: "Team name is already taken" });
+  }
+
+  if (!(await check_number_presence(data.Leader_whatsapp, coll))) {
+    return res.status(405).json({ ok: false, message: `Leader(${Leader_whatsapp}) is already in a team` })
+  }
+  if (data.P2_number !== "" && !(await check_number_presence(data.P2_number, coll))) {
+    return res.status(405).json({ ok: false, message: `P2(${data.P2_number}) is already in a team` })
+  }
+  if (data.P3_number !== "" && !(await check_number_presence(data.P3_number, coll))) {
+    return res.status(405).json({ ok: false, message: `P3(${data.P3_number}) is already in a team` })
+  }
+  if (data.P4_number !== "" && !(await check_number_presence(data.P4_number, coll))) {
+    return res.status(405).json({ ok: false, message: `P4(${data.P4_number}) is already in a team` })
+  }
+  if (data.P5_number !== "" && !(await check_number_presence(data.P5_number, coll))) {
+    return res.status(405).json({ ok: false, message: `P5(${data.P5_number}) is already in a team` })
+  }
+  if (!file) {
+    return res.status(405).json({ ok: false, message: 'Please upload the payment screenshot' })
+  }
+
+  try {
+    const bucket = admin.storage().bucket()
+    const folderPath = `${process.env.DB}/BGMI/Payments/${data.Team_key}/`
+    const fileName = `${file.originalname}`
+    const fileUpload = bucket.file(`${folderPath}${fileName}`)
+
+    await fileUpload.save(file.buffer, {
+      contentType: file.mimetype,
+    })
+
+    const [url] = await fileUpload.getSignedUrl({
+      action: 'read',
+      expires: '03-09-2024',
+    })
+    data['payment'] = url
+  }
+  catch (err) {
+    return res.status(500).json({ ok: false, message: "Error uploading abstract", error: err })
+  }
+
+  // saving the team data to mongodb
+  const formData = new BGMIModel(data)
+  try {
+    await formData.validate()
+  }
+  catch (error) {
+    return res.status(500).json({ ok: false, message: "Error while validating form data", error: error })
+  }
+
+  try {
+    const result = await coll.insertOne(formData.toObject());
+    if (result.acknowledged) {
+      return res.status(200).json({ ok: true, message: "Registered Successfully" });
+    }
+    else {
+      return res.status(400).json({ ok: false, message: "Couldn't Register" });
     }
   }
   catch (error) {
@@ -57,7 +147,10 @@ const Register = async (req, res) => {
   else if (event === "RoboSoccer") {
     await RoboSoccer(db, data, res);
   }
+  else if (event === "bgmi") {
+    await bgmi(db, data, res);
+  }
   else return res.status(200);
 }
 
-module.exports = { Register };
+module.exports = { Register, register_bgmi };

@@ -12,10 +12,18 @@ app.use(cors());
 app.use(express.json())
 app.use(bodyParser.json())
 
+const admin = require('firebase-admin')
+const serviceAccount = require(process.env.FIREBASE_LOCATION)
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  storageBucket: 'technocracy-97aab.appspot.com',
+})
+
 connectToDatabase()
   .then((db) => {
     app.use((req, res, next) => {
       req.db = db;
+      req.admin = admin;
       next();
     });
 
