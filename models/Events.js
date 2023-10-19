@@ -85,62 +85,50 @@ const BGMISchema = new mongoose.Schema({
   },
   P2_name: {
     type: String,
-    required: true,
     trim: true
   },
   P2_id: {
     type: String,
-    required: true,
     trim: true
   },
   P2_number: {
     type: String,
-    required: true,
     trim: true
   },
   P3_name: {
     type: String,
-    required: true,
     trim: true
   },
   P3_id: {
     type: String,
-    required: true,
     trim: true
   },
   P3_number: {
     type: String,
-    required: true,
     trim: true
   },
   P4_name: {
     type: String,
-    required: true,
     trim: true
   },
   P4_id: {
     type: String,
-    required: true,
     trim: true
   },
   P4_number: {
     type: String,
-    required: true,
     trim: true
   },
   P5_name: {
     type: String,
-    required: true,
     trim: true
   },
   P5_id: {
     type: String,
-    required: true,
     trim: true
   },
   P5_number: {
     type: String,
-    required: true,
     trim: true
   },
   payment: {
