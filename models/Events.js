@@ -192,8 +192,60 @@ const AEROFILIA = new mongoose.Schema({
   },
 })
 
+const LogoDesign = new mongoose.Schema({
+  Name: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  Email: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true
+  },
+  Whatsapp: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true
+  },
+  College: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true
+  },
+  Branch: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true
+  },
+  Year: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  Roll_Number: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  Software_Used: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  Prior_Experience: {
+    type: String,
+    trim: true,
+  },
+})
+
 const RoboSoccerModel = mongoose.model("RoboSoccer", RoboSoccerSchema, "RoboSoccer_registration");
 const BGMIModel = mongoose.model("BGMI", BGMISchema, "BGMI_registration");
-const AerofiliaModel = mongoose.model("Aerofilia", AEROFILIA, "Aerofilia_registration")
+const AerofiliaModel = mongoose.model("Aerofilia", AEROFILIA, "Aerofilia_registration");
+const LogoDesignModel = mongoose.model("LogoDesign", LogoDesign, "LogoDesign_registration");
 
-module.exports = { RoboSoccerModel, BGMIModel, AerofiliaModel };
+module.exports = { RoboSoccerModel, BGMIModel, AerofiliaModel, LogoDesignModel };
