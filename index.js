@@ -4,6 +4,7 @@ const bodyParser = require('body-parser')
 const { MongoClient } = require("mongodb");
 const VigyaanRoutes = require('./routes/VigyaanRoutes')
 const EventRoutes = require('./routes/EventRoutes')
+const AdminRoutes = require('./routes/AdminRoutes')
 const { connectToDatabase } = require('./db/conn')
 const app = express();
 require('dotenv').config();
@@ -33,6 +34,7 @@ connectToDatabase()
 
     app.use(VigyaanRoutes)
     app.use(EventRoutes)
+    app.use(AdminRoutes)
 
     const PORT = 5000;
     app.listen(PORT, () => {

@@ -175,9 +175,6 @@ const Register = async (req, res) => {
   else if (event === "RoboSoccer") {
     await RoboSoccer(db, data, res);
   }
-  else if (event === "bgmi") {
-    await bgmi(db, data, res);
-  }
   else if (event === "aerofilia") {
     await Aerofilia(db, data, res);
   }
