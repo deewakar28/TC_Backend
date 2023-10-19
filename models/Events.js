@@ -153,6 +153,11 @@ const AEROFILIA = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
+  },
+  Leader_email: {
+    type: String,
+    required: true,
+    trim: true,
     unique: true
   },
   Leader_whatsapp: {
@@ -160,6 +165,11 @@ const AEROFILIA = new mongoose.Schema({
     required: true,
     trim: true,
     unique: true
+  },
+  Leader_college: {
+    type: String,
+    required: true,
+    trim: true
   },
   Leader_branch: {
     type: String,
@@ -170,6 +180,15 @@ const AEROFILIA = new mongoose.Schema({
     type: String,
     required: true,
     trim: true
+  },
+  P2_name: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  P3_name: {
+    type: String,
+    trim: true,
   },
 })
 
