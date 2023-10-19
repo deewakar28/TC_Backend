@@ -137,7 +137,44 @@ const BGMISchema = new mongoose.Schema({
   },
 })
 
+const AEROFILIA = new mongoose.Schema({
+  Team_key: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true
+  },
+  Team_name: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  Leader_name: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true
+  },
+  Leader_whatsapp: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true
+  },
+  Leader_branch: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  Leader_yog: {
+    type: String,
+    required: true,
+    trim: true
+  },
+})
+
 const RoboSoccerModel = mongoose.model("RoboSoccer", RoboSoccerSchema, "RoboSoccer_registration");
 const BGMIModel = mongoose.model("BGMI", BGMISchema, "BGMI_registration");
+const AerofiliaModel = mongoose.model("Aerofilia", AEROFILIA, "Aerofilia_registration")
 
-module.exports = { RoboSoccerModel, BGMIModel };
+module.exports = { RoboSoccerModel, BGMIModel, AerofiliaModel };

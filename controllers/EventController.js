@@ -1,4 +1,4 @@
-const { RoboSoccerModel, BGMIModel } = require("../models/Events");
+const { RoboSoccerModel, BGMIModel, AerofiliaModel } = require("../models/Events");
 
 const TerrainTreader = async (db, data, res) => {
   try {
@@ -136,6 +136,34 @@ const register_bgmi = async (req, res) => {
   }
 }
 
+const Aerofilia = async (db, data, res) => {
+  try {
+    data.Team_key = data.Team_name.toUpperCase()
+    const formData = new AerofiliaModel(data)
+    await formData.validate()
+
+    const coll = db.collection('Aerofilia_registration');
+    const teamNamePresent = await coll.findOne({ "Team_key": data.Team_key });
+    if (teamNamePresent) {
+      return res.status(405).json({ ok: false, message: "Team name is already taken" });
+    }
+    const leaderPresent = await coll.findOne({ "Leader_whatsapp": data.Leader_whatsapp });
+    if (leaderPresent) {
+      return res.status(405).json({ ok: false, message: "Member with same whatsapp number exists" });
+    }
+    const result = await coll.insertOne(formData.toObject());
+    if (result.acknowledged) {
+      return res.status(200).json({ ok: true, message: "Registered Successfully" });
+    }
+    else {
+      return res.status(400).json({ ok: false, message: "Couldn't Register" });
+    }
+  }
+  catch (error) {
+    return res.status(500).json({ ok: false, message: "Internal Server Error", error: error })
+  }
+}
+
 const Register = async (req, res) => {
   const event = req.query.event;
   const db = req.db
@@ -149,6 +177,9 @@ const Register = async (req, res) => {
   }
   else if (event === "bgmi") {
     await bgmi(db, data, res);
+  }
+  else if (event === "aerofilia") {
+    await Aerofilia(db, data, res);
   }
   else return res.status(200);
 }
