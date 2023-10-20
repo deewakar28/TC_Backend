@@ -4,6 +4,7 @@ const {
   AerofiliaModel,
   LogoDesignModel,
   CircuitrixModel,
+  ValorantModel,
 } = require("../models/Events");
 
 const TerrainTreader = async (db, data, res) => {
@@ -325,6 +326,75 @@ const Circuitrix = async (db, data, res) => {
   }
 };
 
+const Valorant = async (db, data, res) => {
+  console.log(data);
+  const formData = new ValorantModel(data);
+  try {
+    await formData.validate();
+  }
+  catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ ok: false, message: "Internal Server Error", error: error });
+  }
+  try {
+    const teamNamePresent = await coll.findOne({ Team_key: data.Team_key });
+    if (teamNamePresent) {
+      return res
+        .status(405)
+        .json({ ok: false, message: "Team name is already taken" });
+    }
+
+    if (!(await check_number_presence(data.Leader_whatsapp, coll))) {
+      return res.status(405).json({
+        ok: false,
+        message: `Leader(${Leader_whatsapp}) is already in a team`,
+      });
+    }
+    if (
+      data.P2_number !== "" &&
+      !(await check_number_presence(data.P2_number, coll))
+    ) {
+      return res.status(405).json({
+        ok: false,
+        message: `P2(${data.P2_number}) is already in a team`,
+      });
+    }
+    if (
+      data.P3_number !== "" &&
+      !(await check_number_presence(data.P3_number, coll))
+    ) {
+      return res.status(405).json({
+        ok: false,
+        message: `P3(${data.P3_number}) is already in a team`,
+      });
+    }
+    if (
+      data.P4_number !== "" &&
+      !(await check_number_presence(data.P4_number, coll))
+    ) {
+      return res.status(405).json({
+        ok: false,
+        message: `P4(${data.P4_number}) is already in a team`,
+      });
+    }
+    if (
+      data.P5_number !== "" &&
+      !(await check_number_presence(data.P5_number, coll))
+    ) {
+      return res.status(405).json({
+        ok: false,
+        message: `P5(${data.P5_number}) is already in a team`,
+      });
+    }
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ ok: false, message: "Internal Server Error", error: error });
+  }
+};
+
 const Register = async (req, res) => {
   const event = req.query.event;
   const db = req.db;
@@ -340,6 +410,8 @@ const Register = async (req, res) => {
     await LogoDesign(db, data, res);
   } else if (event === "Circuitrix") {
     await Circuitrix(db, data, res);
+  } else if (event === "valo") {
+    await Valorant(db, data, res);
   } else return res.status(200);
 };
 
