@@ -284,9 +284,6 @@ const Circuitrix = async (db, data, res) => {
     await formData.validate();
 
     const coll = db.collection("Circuitrix_registration");
-    const teamNamePresent = await coll.findOne({
-      Participant_name: data.Participant_name,
-    });
 
     const PhonePresent = await coll.findOne({
       Whatsapp: data.Whatsapp,
