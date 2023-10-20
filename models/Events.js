@@ -287,11 +287,16 @@ const CircuitrixSchema = new mongoose.Schema({
 });
 
 const ValorantSchema = new mongoose.Schema({
-  Team_name: {
+  Team_key: {
     type: String,
     required: true,
     trim: true,
     unique: true,
+  },
+  Team_name: {
+    type: String,
+    required: true,
+    trim: true,
   },
   Leader_name: {
     type: String,
@@ -318,70 +323,58 @@ const ValorantSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
+    unique: true
   },
   Leader_college: {
     type: String,
     required: true,
     trim: true,
   },
-  Leader_Game_Name: {
+  Leader_game_id: {
     type: String,
     required: true,
     trim: true,
     unique: true,
   },
-  Leader_id: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  P2_name: {
+  P2_game_id: {
     type: String,
     trim: true,
-  },
-  P2_id: {
-    type: String,
-    trim: true,
+    unique: true
   },
   P2_number: {
     type: String,
     trim: true,
+    unique: true
   },
-  P3_name: {
+  P3_game_id: {
     type: String,
     trim: true,
-  },
-  P3_id: {
-    type: String,
-    trim: true,
+    unique: true
   },
   P3_number: {
     type: String,
     trim: true,
+    unique: true
   },
-  P4_name: {
+  P4_game_id: {
     type: String,
     trim: true,
-  },
-  P4_id: {
-    type: String,
-    trim: true,
+    unique: true
   },
   P4_number: {
     type: String,
     trim: true,
+    unique: true
   },
-  P5_name: {
+  P5_game_id: {
     type: String,
     trim: true,
-  },
-  P5_id: {
-    type: String,
-    trim: true,
+    unique: true
   },
   P5_number: {
     type: String,
     trim: true,
+    unique: true
   },
 });
 
