@@ -274,7 +274,7 @@ const CircuitrixSchema = new mongoose.Schema({
     trim: true,
     unique: true,
   },
-  Year: {
+  YOG: {
     type: String,
     required: true,
     trim: true,
