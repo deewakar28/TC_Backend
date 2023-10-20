@@ -6,6 +6,6 @@ const storage = multer.memoryStorage()
 const upload = multer({ storage })
 const router = Router()
 
-router.post('/server/register', Register);
+router.post('/server/register', upload.single('file'), Register);
 router.post('/server/register/bgmi', upload.single('file'), register_bgmi);
 module.exports = router

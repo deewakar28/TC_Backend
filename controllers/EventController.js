@@ -184,7 +184,7 @@ const register_bgmi = async (req, res) => {
   } catch (err) {
     return res
       .status(500)
-      .json({ ok: false, message: "Error uploading abstract", error: err });
+      .json({ ok: false, message: "Error uploading image", error: err });
   }
 
   // saving the team data to mongodb
@@ -339,18 +339,25 @@ const Circuitrix = async (db, data, res) => {
   }
 };
 
-const Valorant = async (db, data, res) => {
-  const formData = new ValorantModel(data);
-  try {
-    await formData.validate();
-  }
-  catch (error) {
-    return res
-      .status(405)
-      .json({ ok: false, message: "Error while validating data", error: error });
+const Valorant = async (db, data, req, res) => {
+  data.Team_key = data.Team_name.toUpperCase();
+  const file = req.file;
+  delete data.file
+
+  var specialCharacterPattern = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\|/]/
+  if (specialCharacterPattern.test(data.Team_key)) {
+    return res.status(405).json({
+      ok: false,
+      message: "Team name can't contain special characters",
+    });
   }
 
-  data.Team_key = data.Team_name.toUpperCase();
+  if (!file) {
+    return res
+      .status(405)
+      .json({ ok: false, message: "Please upload the payment screenshot" });
+  }
+
   const coll = db.collection("Valorant_registration");
   try {
     const teamNamePresent = await coll.findOne({ Team_key: data.Team_key });
@@ -403,6 +410,38 @@ const Valorant = async (db, data, res) => {
       });
     }
 
+    try {
+      const admin = req.admin;
+      const bucket = admin.storage().bucket();
+      const folderPath = `${process.env.DB}/Valorant/Payments/${data.Team_key}/`;
+      const fileName = `${file.originalname}`;
+      const fileUpload = bucket.file(`${folderPath}${fileName}`);
+
+      await fileUpload.save(file.buffer, {
+        contentType: file.mimetype,
+      });
+
+      const [url] = await fileUpload.getSignedUrl({
+        action: "read",
+        expires: "03-09-2024",
+      });
+      data["Payment"] = url;
+    } catch (err) {
+      return res
+        .status(500)
+        .json({ ok: false, message: "Error uploading image", error: err });
+    }
+
+    const formData = new ValorantModel(data);
+    try {
+      await formData.validate();
+    }
+    catch (error) {
+      return res
+        .status(405)
+        .json({ ok: false, message: "Error while validating data", error: error });
+    }
+
     const result = await coll.insertOne(formData.toObject());
     if (result.acknowledged) {
       return res
@@ -434,7 +473,7 @@ const Register = async (req, res) => {
   } else if (event === "Circuitrix") {
     await Circuitrix(db, data, res);
   } else if (event === "valo") {
-    await Valorant(db, data, res);
+    await Valorant(db, data, req, res);
   } else return res.status(200);
 };
 

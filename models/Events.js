@@ -376,6 +376,10 @@ const ValorantSchema = new mongoose.Schema({
     trim: true,
     unique: true
   },
+  Payment: {
+    type: String,
+    required: true,
+  },
 });
 
 const RoboSoccerModel = mongoose.model(
