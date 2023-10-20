@@ -279,14 +279,21 @@ const LogoDesign = async (db, data, res) => {
 };
 
 const Circuitrix = async (db, data, res) => {
+  console.log(data);
+  const formData = new CircuitrixModel(data);
   try {
-    const formData = new CircuitrixModel(data);
     await formData.validate();
-
+  }
+  catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ ok: false, message: "Internal Server Error", error: error });
+  }
+  try {
     const coll = db.collection("Circuitrix_registration");
-
     const PhonePresent = await coll.findOne({
-      Whatsapp: data.Whatsapp,
+      Whatsapp: data.Whatsapp
     });
     if (PhonePresent) {
       return res.status(400).json({
@@ -295,7 +302,7 @@ const Circuitrix = async (db, data, res) => {
       });
     }
     const EmailPresent = await coll.findOne({
-      Email: data.Email,
+      Email: data.Email
     });
     if (EmailPresent) {
       return res.status(400).json({
@@ -317,6 +324,7 @@ const Circuitrix = async (db, data, res) => {
       .json({ ok: false, message: "Internal Server Error", error: error });
   }
 };
+
 const Register = async (req, res) => {
   const event = req.query.event;
   const db = req.db;

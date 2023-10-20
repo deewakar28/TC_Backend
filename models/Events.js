@@ -279,7 +279,7 @@ const CircuitrixSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  Roll_Number: {
+  Roll_number: {
     type: String,
     required: true,
     trim: true,
