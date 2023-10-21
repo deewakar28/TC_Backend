@@ -5,6 +5,7 @@ const {
   LogoDesignModel,
   CircuitrixModel,
   ValorantModel,
+  AutocadModel,
 } = require("../models/Events");
 
 const TerrainTreader = async (db, data, res) => {
@@ -297,8 +298,7 @@ const Circuitrix = async (db, data, res) => {
   const formData = new CircuitrixModel(data);
   try {
     await formData.validate();
-  }
-  catch (error) {
+  } catch (error) {
     console.log(error);
     return res
       .status(500)
@@ -307,7 +307,7 @@ const Circuitrix = async (db, data, res) => {
   try {
     const coll = db.collection("Circuitrix_registration");
     const PhonePresent = await coll.findOne({
-      Whatsapp: data.Whatsapp
+      Whatsapp: data.Whatsapp,
     });
     if (PhonePresent) {
       return res.status(400).json({
@@ -316,7 +316,7 @@ const Circuitrix = async (db, data, res) => {
       });
     }
     const EmailPresent = await coll.findOne({
-      Email: data.Email
+      Email: data.Email,
     });
     if (EmailPresent) {
       return res.status(400).json({
@@ -342,9 +342,9 @@ const Circuitrix = async (db, data, res) => {
 const Valorant = async (db, data, req, res) => {
   data.Team_key = data.Team_name.toUpperCase();
   const file = req.file;
-  delete data.file
+  delete data.file;
 
-  var specialCharacterPattern = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\|/]/
+  var specialCharacterPattern = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\|/]/;
   if (specialCharacterPattern.test(data.Team_key)) {
     return res.status(405).json({
       ok: false,
@@ -367,7 +367,7 @@ const Valorant = async (db, data, req, res) => {
         .json({ ok: false, message: "Team name is already taken" });
     }
 
-    if ((await is_player_id_present(data.Leader_game_id, coll))) {
+    if (await is_player_id_present(data.Leader_game_id, coll)) {
       return res.status(405).json({
         ok: false,
         message: `Leader ID: (${Leader_game_id}) is already in a team`,
@@ -435,11 +435,76 @@ const Valorant = async (db, data, req, res) => {
     const formData = new ValorantModel(data);
     try {
       await formData.validate();
+    } catch (error) {
+      return res.status(405).json({
+        ok: false,
+        message: "Error while validating data",
+        error: error,
+      });
     }
-    catch (error) {
+
+    const result = await coll.insertOne(formData.toObject());
+    if (result.acknowledged) {
       return res
-        .status(405)
-        .json({ ok: false, message: "Error while validating data", error: error });
+        .status(200)
+        .json({ ok: true, message: "Registered Successfully" });
+    } else {
+      return res.status(400).json({ ok: false, message: "Couldn't Register" });
+    }
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ ok: false, message: "Internal Server Error", error: error });
+  }
+};
+
+const Autocad = async (db, data, res) => {
+  try {
+    await formData.validate();
+  } catch (error) {
+    return res.status(500).json({
+      ok: false,
+      message: "Error validating form data",
+      error: error,
+    });
+  }
+  try {
+    const coll = db.collection("Autocad_registration");
+    const teamNamePresent = await coll.findOne({ Team_name: data.Team_name });
+    if (teamNamePresent) {
+      return res
+        .status(400)
+        .json({ ok: false, message: "Team name is already taken" });
+    }
+    const leaderPresent = await coll.findOne({
+      Leader_whatsapp: data.Leader_whatsapp,
+    });
+    if (!(await check_number(data.Leader_whatsapp, coll))) {
+      return res.status(405).json({
+        ok: false,
+        message: `Leader(${Leader_whatsapp}) is already in a team`,
+      });
+    }
+
+    if (data.P2_number !== "" && !(await check_number(data.P2_number, coll))) {
+      return res.status(405).json({
+        ok: false,
+        message: `P2(${data.P2_number}) is already in a team`,
+      });
+    }
+    if (data.P3_number !== "" && !(await check_number(data.P3_number, coll))) {
+      return res.status(405).json({
+        ok: false,
+        message: `P3(${data.P3_number}) is already in a team`,
+      });
+    }
+
+    async function check_number(number, collection) {
+      const c1 = await collection.findOne({ Leader_whatsapp: number });
+      const c2 = await collection.findOne({ P2_number: number });
+      const c3 = await collection.findOne({ P3_number: number });
+
+      return c1 == null && c2 == null && c3 == null;
     }
 
     const result = await coll.insertOne(formData.toObject());
@@ -474,6 +539,8 @@ const Register = async (req, res) => {
     await Circuitrix(db, data, res);
   } else if (event === "valo") {
     await Valorant(db, data, req, res);
+  } else if (event === "Autocd") {
+    await Autocad(db, data, res);
   } else return res.status(200);
 };
 
