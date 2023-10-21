@@ -458,11 +458,20 @@ const Valorant = async (db, data, req, res) => {
   }
 };
 
+async function check_number(number, collection) {
+  const c1 = await collection.findOne({ Leader_whatsapp: number });
+  const c2 = await collection.findOne({ P2_number: number });
+  const c3 = await collection.findOne({ P3_number: number });
+
+  return c1 == null && c2 == null && c3 == null;
+}
 const Autocad = async (db, data, res) => {
+  data.Team_key = data.Team_name.toUpperCase();
+  const formData = new AutocadModel(data);
   try {
     await formData.validate();
   } catch (error) {
-    return res.status(500).json({
+    return res.status(405).json({
       ok: false,
       message: "Error validating form data",
       error: error,
@@ -470,10 +479,10 @@ const Autocad = async (db, data, res) => {
   }
   try {
     const coll = db.collection("Autocad_registration");
-    const teamNamePresent = await coll.findOne({ Team_name: data.Team_name });
+    const teamNamePresent = await coll.findOne({ Team_key: data.Team_key });
     if (teamNamePresent) {
       return res
-        .status(400)
+        .status(405)
         .json({ ok: false, message: "Team name is already taken" });
     }
     const leaderPresent = await coll.findOne({
@@ -497,14 +506,6 @@ const Autocad = async (db, data, res) => {
         ok: false,
         message: `P3(${data.P3_number}) is already in a team`,
       });
-    }
-
-    async function check_number(number, collection) {
-      const c1 = await collection.findOne({ Leader_whatsapp: number });
-      const c2 = await collection.findOne({ P2_number: number });
-      const c3 = await collection.findOne({ P3_number: number });
-
-      return c1 == null && c2 == null && c3 == null;
     }
 
     const result = await coll.insertOne(formData.toObject());
@@ -539,7 +540,7 @@ const Register = async (req, res) => {
     await Circuitrix(db, data, res);
   } else if (event === "valo") {
     await Valorant(db, data, req, res);
-  } else if (event === "Autocd") {
+  } else if (event === "autocad") {
     await Autocad(db, data, res);
   } else return res.status(200);
 };

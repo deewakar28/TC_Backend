@@ -385,47 +385,44 @@ const ValorantSchema = new mongoose.Schema({
 const AutocadSchema = new mongoose.Schema({
   Team_key: {
     type: String,
-    required: true,
     trim: true,
+    required: true,
     unique: true,
   },
   Team_name: {
     type: String,
-    required: true,
     trim: true,
-    unique: true,
+    required: true,
   },
   Leader_name: {
     type: String,
-    required: true,
     trim: true,
+    required: true,
   },
   Leader_whatsapp: {
     type: String,
-    required: true,
     trim: true,
+    required: true,
     unique: true,
+  },
+  Leader_college: {
+    type: String,
+    trim: true,
+    required: true,
   },
   Leader_branch: {
     type: String,
-    required: true,
     trim: true,
+    required: true,
   },
   Leader_yog: {
     type: String,
-    required: true,
     trim: true,
+    required: true,
   },
-
   P2_name: {
     type: String,
     trim: true,
-    required: true,
-  },
-  P2_number: {
-    type: String,
-    trim: true,
-    unique: true,
     required: true,
   },
   P2_branch: {
@@ -438,16 +435,15 @@ const AutocadSchema = new mongoose.Schema({
     trim: true,
     required: true,
   },
-
-  P3_name: {
-    type: String,
-    trim: true,
-    required: true,
-  },
-  P3_number: {
+  P2_number: {
     type: String,
     trim: true,
     unique: true,
+    required: true,
+  },
+  P3_name: {
+    type: String,
+    trim: true,
     required: true,
   },
   P3_branch: {
@@ -458,6 +454,12 @@ const AutocadSchema = new mongoose.Schema({
   P3_yog: {
     type: String,
     trim: true,
+    required: true,
+  },
+  P3_number: {
+    type: String,
+    trim: true,
+    unique: true,
     required: true,
   },
 });
@@ -488,9 +490,10 @@ const ValorantModel = mongoose.model(
   ValorantSchema,
   "Valorant_registration"
 );
+
 const AutocadModel = mongoose.model(
   "Autocad",
-  AutocadModel,
+  AutocadSchema,
   "Autocad_registration"
 );
 
