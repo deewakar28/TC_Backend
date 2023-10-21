@@ -323,7 +323,7 @@ const ValorantSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
-    unique: true
+    unique: true,
   },
   Leader_college: {
     type: String,
@@ -339,42 +339,42 @@ const ValorantSchema = new mongoose.Schema({
   P2_game_id: {
     type: String,
     trim: true,
-    unique: true
+    unique: true,
   },
   P2_number: {
     type: String,
     trim: true,
-    unique: true
+    unique: true,
   },
   P3_game_id: {
     type: String,
     trim: true,
-    unique: true
+    unique: true,
   },
   P3_number: {
     type: String,
     trim: true,
-    unique: true
+    unique: true,
   },
   P4_game_id: {
     type: String,
     trim: true,
-    unique: true
+    unique: true,
   },
   P4_number: {
     type: String,
     trim: true,
-    unique: true
+    unique: true,
   },
   P5_game_id: {
     type: String,
     trim: true,
-    unique: true
+    unique: true,
   },
   P5_number: {
     type: String,
     trim: true,
-    unique: true
+    unique: true,
   },
   Payment: {
     type: String,
