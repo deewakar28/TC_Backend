@@ -382,6 +382,86 @@ const ValorantSchema = new mongoose.Schema({
   },
 });
 
+const AutocadSchema = new mongoose.Schema({
+  Team_key: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
+  },
+  Team_name: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
+  },
+  Leader_name: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  Leader_whatsapp: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
+  },
+  Leader_branch: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  Leader_yog: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+
+  P2_name: {
+    type: String,
+    trim: true,
+    required: true,
+  },
+  P2_number: {
+    type: String,
+    trim: true,
+    unique: true,
+    required: true,
+  },
+  P2_branch: {
+    type: String,
+    trim: true,
+    required: true,
+  },
+  P2_yog: {
+    type: String,
+    trim: true,
+    required: true,
+  },
+
+  P3_name: {
+    type: String,
+    trim: true,
+    required: true,
+  },
+  P3_number: {
+    type: String,
+    trim: true,
+    unique: true,
+    required: true,
+  },
+  P3_branch: {
+    type: String,
+    trim: true,
+    required: true,
+  },
+  P3_yog: {
+    type: String,
+    trim: true,
+    required: true,
+  },
+});
+
 const RoboSoccerModel = mongoose.model(
   "RoboSoccer",
   RoboSoccerSchema,
@@ -408,6 +488,11 @@ const ValorantModel = mongoose.model(
   ValorantSchema,
   "Valorant_registration"
 );
+const AutocadModel = mongoose.model(
+  "Autocad",
+  AutocadModel,
+  "Autocad_registration"
+);
 
 module.exports = {
   RoboSoccerModel,
@@ -416,4 +501,5 @@ module.exports = {
   LogoDesignModel,
   CircuitrixModel,
   ValorantModel,
+  AutocadModel,
 };
