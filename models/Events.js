@@ -465,13 +465,29 @@ const AutocadSchema = new mongoose.Schema({
 });
 
 const CodeMimeQuestSchema = new mongoose.Schema({
-  Team_name: {
+  Team_key: {
     type: String,
     trim: true,
     required: true,
     unique: true,
   },
+  Team_name: {
+    type: String,
+    trim: true,
+    required: true,
+  },
   Leader_name: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  Leader_whatsapp: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
+  },
+  Leader_college: {
     type: String,
     required: true,
     trim: true,
@@ -485,12 +501,6 @@ const CodeMimeQuestSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
-  },
-  Leader_whatsapp: {
-    type: String,
-    required: true,
-    trim: true,
-    unique: true,
   },
   P2_name: {
     type: String,

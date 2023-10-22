@@ -525,13 +525,19 @@ const Autocad = async (db, data, res) => {
 };
 
 const CodeMime = async (db, data, res) => {
+  data.Team_key = data.Team_name.toUpperCase();
+  const formData = new CodeMimeQuestModel(data);
   try {
-    data.Team_name = data.Team_name.toUpperCase();
-    const formData = new CodeMimeQuestModel(data);
     await formData.validate();
-
+  }
+  catch (error) {
+    return res
+      .status(500)
+      .json({ ok: false, message: "Internal Server Error", error: error });
+  }
+  try {
     const coll = db.collection("CodeMime_registration");
-    const teamNamePresent = await coll.findOne({ Team_name: data.Team_name });
+    const teamNamePresent = await coll.findOne({ Team_key: data.Team_key });
     if (teamNamePresent) {
       return res
         .status(405)
@@ -544,13 +550,6 @@ const CodeMime = async (db, data, res) => {
       return res.status(405).json({
         ok: false,
         message: "Member with same Whatsapp number exists",
-      });
-    }
-    const yog = data.Leader_yog;
-    if ((data.P2_yog !== yog) || ((data.P3_yog !== undefined) && (data.P3_yog !== yog))) {
-      return res.status(405).json({
-        ok: false,
-        message: "All participants must be from the same Year.",
       });
     }
     
@@ -588,7 +587,7 @@ const Register = async (req, res) => {
     await Valorant(db, data, req, res);
   } else if (event === "autocad") {
     await Autocad(db, data, res);
-  } else if (event === "CodeMime") {
+  } else if (event === "codemime") {
     await CodeMime(db, data, res);
   } else return res.status(200);
 };
