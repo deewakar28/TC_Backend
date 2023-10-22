@@ -464,6 +464,63 @@ const AutocadSchema = new mongoose.Schema({
   },
 });
 
+const CodeMimeQuestSchema = new mongoose.Schema({
+  Team_name: {
+    type: String,
+    trim: true,
+    required: true,
+    unique: true,
+  },
+  Leader_name: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  Leader_branch: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  Leader_yog: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  Leader_whatsapp: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
+  },
+  P2_name: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  P2_branch: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  P2_yog: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  P3_name: {
+    type: String,
+    trim: true,
+  },
+  P3_branch: {
+    type: String,
+    trim: true,
+  },
+  P3_yog: {
+    type: String,
+    trim: true,
+  },
+});
+
 const RoboSoccerModel = mongoose.model(
   "RoboSoccer",
   RoboSoccerSchema,
@@ -496,6 +553,11 @@ const AutocadModel = mongoose.model(
   AutocadSchema,
   "Autocad_registration"
 );
+const CodeMimeQuestModel = mongoose.model(
+  "CodeMime Quest",
+  CodeMimeQuestSchema,
+  "CodeMime_registration"
+)
 
 module.exports = {
   RoboSoccerModel,
@@ -505,4 +567,5 @@ module.exports = {
   CircuitrixModel,
   ValorantModel,
   AutocadModel,
+  CodeMimeQuestModel,
 };
