@@ -343,7 +343,7 @@ const Circuitrix = async (db, data, res) => {
 };
 
 const Valorant = async (db, data, req, res) => {
-  // data.Team_key = data.Team_key.toUpperCase();
+  data.Team_key = data.Team_key.toUpperCase();
   // const file = req.file;
   // delete data.file;
 
