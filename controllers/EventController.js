@@ -412,7 +412,27 @@ const Valorant = async (db, data, req, res) => {
         message: `P5: (${data.P5_game_id}) is already in a team`,
       });
     }
+    // try {
+    //   const admin = req.admin;
+    //   const bucket = admin.storage().bucket();
+    //   const folderPath = `${process.env.DB}/Valorant/Payments/${data.Team_key}/`;
+    //   const fileName = `${file.originalname}`;
+    //   const fileUpload = bucket.file(`${folderPath}${fileName}`);
 
+    //   await fileUpload.save(file.buffer, {
+    //     contentType: file.mimetype,
+    //   });
+
+    //   const [url] = await fileUpload.getSignedUrl({
+    //     action: "read",
+    //     expires: "03-09-2024",
+    //   });
+    //   data["Payment"] = url;
+    // } catch (err) {
+    //   return res
+    //     .status(500)
+    //     .json({ ok: false, message: "Error uploading image", error: err });
+    // }
     const formData = new ValorantModel(data);
     try {
       await formData.validate();
