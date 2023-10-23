@@ -376,10 +376,10 @@ const ValorantSchema = new mongoose.Schema({
     trim: true,
     unique: true,
   },
-  Payment: {
-    type: String,
-    required: true,
-  },
+  // Payment: {
+  //   type: String,
+  //   required: true,
+  // },
 });
 
 const AutocadSchema = new mongoose.Schema({
