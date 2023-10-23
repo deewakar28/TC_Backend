@@ -343,12 +343,12 @@ const Circuitrix = async (db, data, res) => {
 };
 
 const Valorant = async (db, data, req, res) => {
-  data.Team_key = data.Team_name.toUpperCase();
+  // data.Team_key = data.Team_key.toUpperCase();
   // const file = req.file;
   // delete data.file;
 
   var specialCharacterPattern = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\|/]/;
-  if (specialCharacterPattern.test(data.Team_key)) {
+  if (specialCharacterPattern.test(data.Team_name)) {
     return res.status(405).json({
       ok: false,
       message: "Team name can't contain special characters",
@@ -363,7 +363,7 @@ const Valorant = async (db, data, req, res) => {
 
   const coll = db.collection("Valorant_registration");
   try {
-    const teamNamePresent = await coll.findOne({ Team_key: data.Team_key });
+    const teamNamePresent = await coll.findOne({ Team_name: data.Team_name });
     if (teamNamePresent) {
       return res
         .status(405)
