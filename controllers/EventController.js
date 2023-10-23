@@ -552,7 +552,7 @@ const CodeMime = async (db, data, res) => {
         message: "Member with same Whatsapp number exists",
       });
     }
-    
+
     const result = await coll.insertOne(formData.toObject());
     if (result.acknowledged) {
       return res
@@ -589,25 +589,25 @@ const TalentShow = async (db, data, res) => {
         message: "Member with same Roll Number exists",
       });
     }
-    if (data.P2_rollno !== "" && (await coll.findOne({P2_rollno: data.P2_rollno}))) {
+    if (data.P2_rollno !== "" && (await coll.findOne({ P2_rollno: data.P2_rollno }))) {
       return res.status(405).json({
         ok: false,
         message: `P2 (${data.P2_rollno}) is already in a team`,
       });
     }
-    if (data.P3_rollno !== "" && (await coll.findOne({P3_rollno: data.P3_rollno}))) {
+    if (data.P3_rollno !== "" && (await coll.findOne({ P3_rollno: data.P3_rollno }))) {
       return res.status(405).json({
         ok: false,
         message: `P3 (${data.P3_rollno}) is already in a team`,
       });
     }
-    if (data.P4_rollno !== "" && (await coll.findOne({P4_rollno: data.P4_rollno}))) {
+    if (data.P4_rollno !== "" && (await coll.findOne({ P4_rollno: data.P4_rollno }))) {
       return res.status(405).json({
         ok: false,
         message: `P4 (${data.P4_rollno}) is already in a team`,
       });
     }
-    
+
     const result = await coll.insertOne(formData.toObject());
     if (result.acknowledged) {
       return res
@@ -624,20 +624,19 @@ const TalentShow = async (db, data, res) => {
 };
 
 const SpeedCubing = async (db, data, res) => {
-  console.log(data);
   const formData = new SpeedCubingModel(data);
   try {
     await formData.validate();
   } catch (error) {
     console.log(error);
     return res
-      .status(500)
-      .json({ ok: false, message: "Internal Server Error", error: error });
+      .status(405)
+      .json({ ok: false, message: "Error validating form", error: error });
   }
   try {
     const coll = db.collection("SpeedCubing_registration");
     const PhonePresent = await coll.findOne({
-      Contact: data.Contact,
+      Phone: data.Phone,
     });
     if (PhonePresent) {
       return res.status(400).json({
@@ -694,7 +693,11 @@ const Register = async (req, res) => {
     await TalentShow(db, data, res);
   } else if (event === "speedcubing") {
     await SpeedCubing(db, data, res);
-  } else return res.status(200);
+  }
+  else if (event === "speedCubing") {
+    await SpeedCubing(db, data, res);
+  }
+  else return res.status(200);
 };
 
 module.exports = { Register, register_bgmi };

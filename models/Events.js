@@ -610,7 +610,7 @@ const TalentShowSchema = new mongoose.Schema({
 });
 
 const SpeedCubingSchema = new mongoose.Schema({
-  Participant_name: {
+  Name: {
     type: String,
     required: true,
     trim: true,
@@ -621,13 +621,13 @@ const SpeedCubingSchema = new mongoose.Schema({
     trim: true,
     unique: true,
   },
-  Contact: {
+  Phone: {
     type: String,
     required: true,
     trim: true,
     unique: true,
   },
-  Additional_contact: {
+  Additional_phone: {
     type: String,
     trim: true,
   },
@@ -646,12 +646,7 @@ const SpeedCubingSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  Roll_number: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  Cube_type: {
+  Preferred_cube_type: {
     type: String,
     required: true,
     trim: true,
