@@ -609,6 +609,64 @@ const TalentShowSchema = new mongoose.Schema({
   },
 });
 
+const SpeedCubingSchema = new mongoose.Schema({
+  Participant_name: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  Email: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
+  },
+  Contact: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
+  },
+  Additional_contact: {
+    type: String,
+    trim: true,
+  },
+  College: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  Branch: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  YOG: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  Roll_number: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  Cube_type: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  Experience: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  Achievements: {
+    type: String,
+    trim: true,
+  },
+});
+
 const RoboSoccerModel = mongoose.model(
   "RoboSoccer",
   RoboSoccerSchema,
@@ -654,6 +712,11 @@ const TalentShowModel = mongoose.model(
   TalentShowSchema,
   "TalentShow_registration"
 );
+const SpeedCubingModel = mongoose.model(
+  "Speed Cubing",
+  SpeedCubingSchema,
+  "SpeedCubing_registration"
+);
 
 module.exports = {
   RoboSoccerModel,
@@ -665,4 +728,5 @@ module.exports = {
   AutocadModel,
   CodeMimeQuestModel,
   TalentShowModel,
+  SpeedCubingModel,
 };

@@ -8,6 +8,7 @@ const {
   AutocadModel,
   CodeMimeQuestModel,
   TalentShowModel,
+  SpeedCubingModel,
 } = require("../models/Events");
 
 const TerrainTreader = async (db, data, res) => {
@@ -624,6 +625,52 @@ const TalentShow = async (db, data, res) => {
   }
 };
 
+const SpeedCubing = async (db, data, res) => {
+  console.log(data);
+  const formData = new SpeedCubingModel(data);
+  try {
+    await formData.validate();
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ ok: false, message: "Internal Server Error", error: error });
+  }
+  try {
+    const coll = db.collection("SpeedCubing_registration");
+    const PhonePresent = await coll.findOne({
+      Contact: data.Contact,
+    });
+    if (PhonePresent) {
+      return res.status(400).json({
+        ok: false,
+        message: "Participant with same Phone number exists",
+      });
+    }
+    const EmailPresent = await coll.findOne({
+      Email: data.Email,
+    });
+    if (EmailPresent) {
+      return res.status(400).json({
+        ok: false,
+        message: "Participant with same Email exists",
+      });
+    }
+    const result = await coll.insertOne(formData.toObject());
+    if (result.acknowledged) {
+      return res
+        .status(200)
+        .json({ ok: true, message: "Registered Successfully" });
+    } else {
+      return res.status(400).json({ ok: false, message: "Couldn't Register" });
+    }
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ ok: false, message: "Internal Server Error", error: error });
+  }
+};
+
 const Register = async (req, res) => {
   const event = req.query.event;
   const db = req.db;
@@ -647,8 +694,9 @@ const Register = async (req, res) => {
     await CodeMime(db, data, res);
   } else if (event === "talentshow") {
     await TalentShow(db, data, res);
-  }
-  else return res.status(200);
+  } else if (event === "speedcubing") {
+    await SpeedCubing(db, data, res);
+  } else return res.status(200);
 };
 
 module.exports = { Register, register_bgmi };
