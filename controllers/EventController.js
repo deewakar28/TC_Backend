@@ -344,8 +344,8 @@ const Circuitrix = async (db, data, res) => {
 
 const Valorant = async (db, data, req, res) => {
   data.Team_key = data.Team_name.toUpperCase();
-  const file = req.file;
-  delete data.file;
+  // const file = req.file;
+  // delete data.file;
 
   var specialCharacterPattern = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\|/]/;
   if (specialCharacterPattern.test(data.Team_key)) {
@@ -355,11 +355,11 @@ const Valorant = async (db, data, req, res) => {
     });
   }
 
-  if (!file) {
-    return res
-      .status(405)
-      .json({ ok: false, message: "Please upload the payment screenshot" });
-  }
+  // if (!file) {
+  //   return res
+  //     .status(405)
+  //     .json({ ok: false, message: "Please upload the payment screenshot" });
+  // }
 
   const coll = db.collection("Valorant_registration");
   try {
