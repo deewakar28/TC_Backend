@@ -343,7 +343,7 @@ const Circuitrix = async (db, data, res) => {
 };
 
 const Valorant = async (db, data, req, res) => {
-  data.Team_key = data.Team_key.toUpperCase();
+  data.Team_key = data.Team_name.toUpperCase();
   // const file = req.file;
   // delete data.file;
 
@@ -363,7 +363,7 @@ const Valorant = async (db, data, req, res) => {
 
   const coll = db.collection("Valorant_registration");
   try {
-    const teamNamePresent = await coll.findOne({ Team_name: data.Team_name });
+    const teamNamePresent = await coll.findOne({ Team_key: data.Team_key });
     if (teamNamePresent) {
       return res
         .status(405)
@@ -373,7 +373,7 @@ const Valorant = async (db, data, req, res) => {
     if (await is_player_id_present(data.Leader_game_id, coll)) {
       return res.status(405).json({
         ok: false,
-        message: `Leader ID: (${Leader_game_id}) is already in a team`,
+        message: `Leader ID: (${data.Leader_game_id}) is already in a team`,
       });
     }
     if (
