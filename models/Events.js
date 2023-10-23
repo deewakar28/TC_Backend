@@ -287,11 +287,16 @@ const CircuitrixSchema = new mongoose.Schema({
 });
 
 const ValorantSchema = new mongoose.Schema({
-  Team_name: {
+  Team_key: {
     type: String,
     required: true,
     trim: true,
     unique: true,
+  },
+  Team_name: {
+    type: String,
+    required: true,
+    trim: true
   },
   Leader_name: {
     type: String,
