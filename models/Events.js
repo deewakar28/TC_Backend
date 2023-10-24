@@ -684,6 +684,11 @@ const TreasureHuntSchema = new mongoose.Schema({
     trim: true,
     unique: true,
   },
+  Leader_college: {
+    type: String,
+    required: true,
+    trim: true,
+  },
   Leader_branch: {
     type: String,
     required: true,
@@ -699,7 +704,7 @@ const TreasureHuntSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  P2_whatsapp: {
+  P2_number: {
     type: String,
     required: true,
     trim: true,
@@ -720,7 +725,7 @@ const TreasureHuntSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  P3_whatsapp: {
+  P3_number: {
     type: String,
     required: true,
     trim: true,
@@ -741,7 +746,7 @@ const TreasureHuntSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  P4_whatsapp: {
+  P4_number: {
     type: String,
     required: true,
     trim: true,
@@ -753,6 +758,27 @@ const TreasureHuntSchema = new mongoose.Schema({
     trim: true,
   },
   P4_yog: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  P5_name: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  P5_number: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
+  },
+  P5_branch: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  P5_yog: {
     type: String,
     required: true,
     trim: true,
