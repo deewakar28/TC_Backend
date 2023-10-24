@@ -784,6 +784,115 @@ const TreasureHuntSchema = new mongoose.Schema({
     trim: true,
   },
 });
+const SurvivalSchema = new mongoose.Schema({
+  Leader_name: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  Leader_whatsapp: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
+  },
+  Leader_branch: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  Leader_sem: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  Leader_mail: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  P2_name: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  P2_number: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
+  },
+  P2_branch: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  P2_sem: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  P2_mail: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+});
+
+const ReactionRacingSchema = new mongoose.Schema({
+  Leader_name: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  Leader_whatsapp: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
+  },
+  Leader_branch: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  Leader_sem: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  Leader_mail: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  P2_name: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  P2_number: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
+  },
+  P2_branch: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  P2_sem: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  P2_mail: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+});
 
 const RoboSoccerModel = mongoose.model(
   "RoboSoccer",
@@ -836,6 +945,16 @@ const TreasureHuntModel = mongoose.model(
   TreasureHuntSchema,
   "TreasureHunt_registration"
 );
+const SurvivalModel = mongoose.model(
+  "Survival",
+  SurvivalSchema,
+  "Survival_registration"
+);
+const ReactionRacingModel = mongoose.model(
+  "Reaction Racing",
+  ReactionRacingSchema,
+  "ReactionRacing_registration"
+);
 
 module.exports = {
   RoboSoccerModel,
@@ -849,4 +968,6 @@ module.exports = {
   TalentShowModel,
   SpeedCubingModel,
   TreasureHuntModel,
+  ReactionRacingModel,
+  SurvivalModel,
 };
