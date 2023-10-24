@@ -806,7 +806,7 @@ const SurvivalSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  Leader_mail: {
+  Leader_email: {
     type: String,
     required: true,
     trim: true,
@@ -815,12 +815,6 @@ const SurvivalSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
-  },
-  P2_number: {
-    type: String,
-    required: true,
-    trim: true,
-    unique: true,
   },
   P2_branch: {
     type: String,
@@ -832,10 +826,16 @@ const SurvivalSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  P2_mail: {
+  P2_email: {
     type: String,
     required: true,
     trim: true,
+  },
+  P2_number: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
   },
 });
 
@@ -861,7 +861,7 @@ const ReactionRacingSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  Leader_mail: {
+  Leader_email: {
     type: String,
     required: true,
     trim: true,
@@ -870,12 +870,6 @@ const ReactionRacingSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
-  },
-  P2_number: {
-    type: String,
-    required: true,
-    trim: true,
-    unique: true,
   },
   P2_branch: {
     type: String,
@@ -887,10 +881,16 @@ const ReactionRacingSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  P2_mail: {
+  P2_email: {
     type: String,
     required: true,
     trim: true,
+  },
+  P2_number: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
   },
 });
 

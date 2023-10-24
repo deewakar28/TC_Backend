@@ -750,7 +750,7 @@ const Survival = async (db, data, res) => {
     await formData.validate();
   } catch (error) {
     return res
-      .status(500)
+      .status(405)
       .json({ ok: false, message: "Error validating form data", error: error });
   }
 
@@ -758,19 +758,19 @@ const Survival = async (db, data, res) => {
     const coll = db.collection("Survival_registration");
 
     async function check_mail(mail, collection) {
-      const c1 = await collection.findOne({ Leader_mail: mail });
-      const c2 = await collection.findOne({ P2_mail: mail });
+      const c1 = await collection.findOne({ Leader_email: mail });
+      const c2 = await collection.findOne({ P2_email: mail });
       return c1 == null && c2 == null;
     }
-    if (!(await check_mail(data.Leader_mail, coll))) {
+    if (!(await check_mail(data.Leader_email, coll))) {
       return res
         .status(405)
-        .json({ ok: false, message: "Email is already registered" });
+        .json({ ok: false, message: "Leader's email is already registered" });
     }
-    if (!(await check_mail(data.P2_mail, coll))) {
+    if (!(await check_mail(data.P2_email, coll))) {
       return res
         .status(405)
-        .json({ ok: false, message: "Email is already registered" });
+        .json({ ok: false, message: "Email id of Player2 is already registered" });
     }
     async function check_number(number, collection) {
       const c1 = await collection.findOne({ Leader_whatsapp: number });
@@ -812,7 +812,7 @@ const ReactionRacing = async (db, data, res) => {
     await formData.validate();
   } catch (error) {
     return res
-      .status(500)
+      .status(405)
       .json({ ok: false, message: "Error validating form data", error: error });
   }
 
@@ -820,19 +820,19 @@ const ReactionRacing = async (db, data, res) => {
     const coll = db.collection("ReactionRacing_registration");
 
     async function check_mail(mail, collection) {
-      const c1 = await collection.findOne({ Leader_mail: mail });
-      const c2 = await collection.findOne({ P2_mail: mail });
+      const c1 = await collection.findOne({ Leader_email: mail });
+      const c2 = await collection.findOne({ P2_email: mail });
       return c1 == null && c2 == null;
     }
-    if (!(await check_mail(data.Leader_mail, coll))) {
+    if (!(await check_mail(data.Leader_email, coll))) {
       return res
         .status(405)
-        .json({ ok: false, message: "Email is already registered" });
+        .json({ ok: false, message: "Leader's email is already registered" });
     }
-    if (!(await check_mail(data.P2_mail, coll))) {
+    if (!(await check_mail(data.P2_email, coll))) {
       return res
         .status(405)
-        .json({ ok: false, message: "Email is already registered" });
+        .json({ ok: false, message: "Email id of Player2 is already registered" });
     }
     async function check_number(number, collection) {
       const c1 = await collection.findOne({ Leader_whatsapp: number });
@@ -902,7 +902,7 @@ const Register = async (req, res) => {
     await Survival(db, data, res);
   } else if (event === "ReactionRacing") {
     await ReactionRacing(db, data, res);
-  } else return res.status(200);
+  }else return res.status(200);
 };
 
 module.exports = { Register, register_bgmi };
