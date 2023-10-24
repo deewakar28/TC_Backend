@@ -9,6 +9,7 @@ const {
   CodeMimeQuestModel,
   TalentShowModel,
   SpeedCubingModel,
+  TreasureHuntModel,
 } = require("../models/Events");
 
 const TerrainTreader = async (db, data, res) => {
@@ -529,8 +530,7 @@ const CodeMime = async (db, data, res) => {
   const formData = new CodeMimeQuestModel(data);
   try {
     await formData.validate();
-  }
-  catch (error) {
+  } catch (error) {
     return res
       .status(500)
       .json({ ok: false, message: "Internal Server Error", error: error });
@@ -572,8 +572,7 @@ const TalentShow = async (db, data, res) => {
   const formData = new TalentShowModel(data);
   try {
     await formData.validate();
-  }
-  catch (error) {
+  } catch (error) {
     return res
       .status(500)
       .json({ ok: false, message: "Internal Server Error", error: error });
@@ -589,19 +588,28 @@ const TalentShow = async (db, data, res) => {
         message: "Member with same Roll Number exists",
       });
     }
-    if (data.P2_rollno !== "" && (await coll.findOne({ P2_rollno: data.P2_rollno }))) {
+    if (
+      data.P2_rollno !== "" &&
+      (await coll.findOne({ P2_rollno: data.P2_rollno }))
+    ) {
       return res.status(405).json({
         ok: false,
         message: `P2 (${data.P2_rollno}) is already in a team`,
       });
     }
-    if (data.P3_rollno !== "" && (await coll.findOne({ P3_rollno: data.P3_rollno }))) {
+    if (
+      data.P3_rollno !== "" &&
+      (await coll.findOne({ P3_rollno: data.P3_rollno }))
+    ) {
       return res.status(405).json({
         ok: false,
         message: `P3 (${data.P3_rollno}) is already in a team`,
       });
     }
-    if (data.P4_rollno !== "" && (await coll.findOne({ P4_rollno: data.P4_rollno }))) {
+    if (
+      data.P4_rollno !== "" &&
+      (await coll.findOne({ P4_rollno: data.P4_rollno }))
+    ) {
       return res.status(405).json({
         ok: false,
         message: `P4 (${data.P4_rollno}) is already in a team`,
@@ -667,6 +675,73 @@ const SpeedCubing = async (db, data, res) => {
       .json({ ok: false, message: "Internal Server Error", error: error });
   }
 };
+const TreasureHunt = async (db, data, res) => {
+  data.Team_key = data.Team_name.toUpperCase();
+  const formData = new TreasureHuntModel(data);
+  try {
+    await formData.validate();
+  } catch (error) {
+    return res.status(405).json({
+      ok: false,
+      message: "Error validating form data",
+      error: error,
+    });
+  }
+  try {
+    const coll = db.collection("Treasure_registration");
+    const teamNamePresent = await coll.findOne({ Team_key: data.Team_key });
+    if (teamNamePresent) {
+      return res
+        .status(405)
+        .json({ ok: false, message: "Team name is already taken" });
+    }
+    async function check_number(number, collection) {
+      const c1 = await collection.findOne({ Leader_whatsapp: number });
+      const c2 = await collection.findOne({ P2_number: number });
+      const c3 = await collection.findOne({ P3_number: number });
+      const c4 = await collection.findOne({ P4_number: number });
+      return c1 == null && c2 == null && c3 == null && c4 == null;
+    }
+    if (!(await check_number(data.Leader_whatsapp, coll))) {
+      return res.status(405).json({
+        ok: false,
+        message: `Leader(${Leader_whatsapp}) is already in a team`,
+      });
+    }
+
+    if (data.P2_number !== "" && !(await check_number(data.P2_number, coll))) {
+      return res.status(405).json({
+        ok: false,
+        message: `P2(${data.P2_number}) is already in a team`,
+      });
+    }
+    if (data.P3_number !== "" && !(await check_number(data.P3_number, coll))) {
+      return res.status(405).json({
+        ok: false,
+        message: `P3(${data.P3_number}) is already in a team`,
+      });
+    }
+    if (data.P4_number !== "" && !(await check_number(data.P4_number, coll))) {
+      return res.status(405).json({
+        ok: false,
+        message: `P4(${data.P4_number}) is already in a team`,
+      });
+    }
+
+    const result = await coll.insertOne(formData.toObject());
+    if (result.acknowledged) {
+      return res
+        .status(200)
+        .json({ ok: true, message: "Registered Successfully" });
+    } else {
+      return res.status(400).json({ ok: false, message: "Couldn't Register" });
+    }
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ ok: false, message: "Internal Server Error", error: error });
+  }
+};
 
 const Register = async (req, res) => {
   const event = req.query.event;
@@ -693,11 +768,11 @@ const Register = async (req, res) => {
     await TalentShow(db, data, res);
   } else if (event === "speedcubing") {
     await SpeedCubing(db, data, res);
-  }
-  else if (event === "speedCubing") {
+  } else if (event === "speedCubing") {
     await SpeedCubing(db, data, res);
-  }
-  else return res.status(200);
+  } else if (event === "TreasureHunt") {
+    await TreasureHunt(db, data, res);
+  } else return res.status(200);
 };
 
 module.exports = { Register, register_bgmi };

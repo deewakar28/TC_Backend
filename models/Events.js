@@ -296,7 +296,7 @@ const ValorantSchema = new mongoose.Schema({
   Team_name: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
   },
   Leader_name: {
     type: String,
@@ -661,17 +661,110 @@ const SpeedCubingSchema = new mongoose.Schema({
     trim: true,
   },
 });
+const TreasureHuntSchema = new mongoose.Schema({
+  Team_key: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
+  },
+  Team_name: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  Leader_name: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  Leader_whatsapp: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
+  },
+  Leader_branch: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  Leader_yog: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  P2_name: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  P2_whatsapp: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
+  },
+  P2_branch: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  P2_yog: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  P3_name: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  P3_whatsapp: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
+  },
+  P3_branch: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  P3_yog: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  P4_name: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  P4_whatsapp: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
+  },
+  P4_branch: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  P4_yog: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+});
 
 const RoboSoccerModel = mongoose.model(
   "RoboSoccer",
   RoboSoccerSchema,
   "RoboSoccer_registration"
 );
-const BGMIModel = mongoose.model(
-  "BGMI", 
-  BGMISchema, 
-  "BGMI_registration"
-);
+const BGMIModel = mongoose.model("BGMI", BGMISchema, "BGMI_registration");
 const AerofiliaModel = mongoose.model(
   "Aerofilia",
   AEROFILIA,
@@ -712,6 +805,11 @@ const SpeedCubingModel = mongoose.model(
   SpeedCubingSchema,
   "SpeedCubing_registration"
 );
+const TreasureHuntModel = mongoose.model(
+  "Treasure Hunt",
+  TreasureHuntSchema,
+  "TreasureHunt_registration"
+);
 
 module.exports = {
   RoboSoccerModel,
@@ -724,4 +822,5 @@ module.exports = {
   CodeMimeQuestModel,
   TalentShowModel,
   SpeedCubingModel,
+  TreasureHuntModel,
 };
