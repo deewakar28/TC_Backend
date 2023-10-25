@@ -881,48 +881,48 @@ const Ecopolis = async (db, data, res) => {
   }
 
   try {
-    const coll = db.collection("Ecopolis_registration");
+    const collection = db.collection("Ecopolis_registration");
     const present = await collection.findOne({ Team_name: data["Team_name"] });
     if (present)
-        return res
-          .status(400)
-          .json({ ok: false, message: "Team name is already taken" });
+      return res
+        .status(400)
+        .json({ ok: false, message: "Team name is already taken" });
 
     async function check_mail(mail, collection) {
-      const c1 = await collection.findOne({ Leader_Email: mail });
+      const c1 = await collection.findOne({ Leader_email: mail });
       return c1 == null;
     }
-    if (!(await check_mail(data.Leader_Email, coll))) {
+    if (!(await check_mail(data.Leader_email, collection))) {
       return res
         .status(405)
         .json({ ok: false, message: "Leader's email is already registered" });
     }
 
     async function check_number(number, collection) {
-      const c1 = await collection.findOne({ Leader_number: number });
+      const c1 = await collection.findOne({ Leader_whatsapp: number });
       const c2 = await collection.findOne({ P2_number: number });
       const c3 = await collection.findOne({ P3_number: number });
       return c1 == null && c2 == null && c3 == null;
     }
-    if (data.Leader_number !== "" && !(await check_number(data.Leader_number, coll))) {
+    if (data.Leader_whatsapp !== "" && !(await check_number(data.Leader_whatsapp, collection))) {
       return res.status(405).json({
         ok: false,
         message: `Leader(${data.Leader_whatsapp}) is already in a team`,
       });
     }
-    if (data.P2_number !== "" && !(await check_number(data.P2_number, coll))) {
+    if (data.P2_number !== "" && !(await check_number(data.P2_number, collection))) {
       return res.status(405).json({
         ok: false,
         message: `P2(${data.P2_number}) is already in a team`,
       });
     }
-    if (data.P3_number !== "" && !(await check_number(data.P3_number, coll))) {
+    if (data.P3_number !== "" && !(await check_number(data.P3_number, collection))) {
       return res.status(405).json({
         ok: false,
         message: `P2(${data.P3_number}) is already in a team`,
       });
     }
-    const result = await coll.insertOne(formData.toObject());
+    const result = await collection.insertOne(formData.toObject());
     if (result.acknowledged) {
       return res
         .status(200)

@@ -901,17 +901,18 @@ const EcopolisSchema = new mongoose.Schema({
     trim: true,
     unique: true,
   },
-  No_of_members: {
-    type: String,
-    required: true,
-    trim: true,
-  },
   Leader_name: {
     type: String,
     required: true,
     trim: true,
   },
-  Leader_number: {
+  Leader_whatsapp: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
+  },
+  Leader_email: {
     type: String,
     required: true,
     trim: true,
@@ -921,12 +922,6 @@ const EcopolisSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
-  },
-  Leader_Email: {
-    type: String,
-    required: true,
-    trim: true,
-    unique: true,
   },
   P2_name: {
     type: String,
