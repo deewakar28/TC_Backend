@@ -894,6 +894,74 @@ const ReactionRacingSchema = new mongoose.Schema({
   },
 });
 
+const EcopolisSchema = new mongoose.Schema({
+  Team_name: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
+  },
+  No_of_members: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  Leader_name: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  Leader_number: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
+  },
+  Leader_semester: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  Leader_Email: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
+  },
+  P2_name: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  P2_number: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
+  },
+  P2_semester: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  P3_name: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  P3_number: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
+  },
+  P3_semester: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+});
+
 const RoboSoccerModel = mongoose.model(
   "RoboSoccer",
   RoboSoccerSchema,
@@ -955,6 +1023,11 @@ const ReactionRacingModel = mongoose.model(
   ReactionRacingSchema,
   "ReactionRacing_registration"
 );
+const EcopolisModel = mongoose.model(
+  "Ecopolis Model",
+  EcopolisSchema,
+  "Eceopolis_registration"
+)
 
 module.exports = {
   RoboSoccerModel,
@@ -970,4 +1043,5 @@ module.exports = {
   TreasureHuntModel,
   ReactionRacingModel,
   SurvivalModel,
+  EcopolisModel,
 };
