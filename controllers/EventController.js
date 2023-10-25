@@ -573,36 +573,37 @@ const CodeMime = async (db, data, res) => {
 
 const TalentShow = async (db, data, res) => {
   const formData = new TalentShowModel(data);
+  console.log(formData);
   try {
     await formData.validate();
   } catch (error) {
     return res
-      .status(500)
-      .json({ ok: false, message: "Internal Server Error", error: error });
+      .status(405)
+      .json({ ok: false, message: "Error validating form data", error: error });
   }
   try {
     const coll = db.collection("TalentShow_registration");
     const leaderPresent = await coll.findOne({
-      P1_rollno: data.P1_rollno,
+      P1_whatsapp: data.P1_whatsapp,
     });
     if (leaderPresent) {
       return res.status(405).json({
         ok: false,
-        message: "Member with same Roll Number exists",
+        message: "Member with same Phone Number exists",
       });
     }
     if (
-      data.P2_rollno !== "" &&
-      (await coll.findOne({ P2_rollno: data.P2_rollno }))
+      data.P2_whatsapp !== "" &&
+      (await coll.findOne({ P2_whatsapp: data.P2_whatsapp }))
     ) {
       return res.status(405).json({
         ok: false,
-        message: `P2 (${data.P2_rollno}) is already in a team`,
+        message: `P2 (${data.P2_whatsapp}) is already in a team`,
       });
     }
     if (
-      data.P3_rollno !== "" &&
-      (await coll.findOne({ P3_rollno: data.P3_rollno }))
+      data.P3_whatsapp !== "" &&
+      (await coll.findOne({ P3_whatsapp: data.P3_whatsapp }))
     ) {
       return res.status(405).json({
         ok: false,
@@ -610,8 +611,8 @@ const TalentShow = async (db, data, res) => {
       });
     }
     if (
-      data.P4_rollno !== "" &&
-      (await coll.findOne({ P4_rollno: data.P4_rollno }))
+      data.P4_whatsapp !== "" &&
+      (await coll.findOne({ P4_whatsapp: data.P4_whatsapp }))
     ) {
       return res.status(405).json({
         ok: false,
@@ -958,7 +959,7 @@ const Register = async (req, res) => {
     await Autocad(db, data, res);
   } else if (event === "codemime") {
     await CodeMime(db, data, res);
-  } else if (event === "talentshow") {
+  } else if (event === "talentShow") {
     await TalentShow(db, data, res);
   } else if (event === "speedcubing") {
     await SpeedCubing(db, data, res);
