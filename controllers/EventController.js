@@ -573,7 +573,6 @@ const CodeMime = async (db, data, res) => {
 
 const TalentShow = async (db, data, res) => {
   const formData = new TalentShowModel(data);
-  console.log(formData);
   try {
     await formData.validate();
   } catch (error) {
