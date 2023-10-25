@@ -13,6 +13,7 @@ const {
   ReactionRacingModel,
   SurvivalModel,
   EcopolisModel,
+  MechanicalJunkyardModel
 } = require("../models/Events");
 
 const TerrainTreader = async (db, data, res) => {
@@ -937,6 +938,70 @@ const Ecopolis = async (db, data, res) => {
   }
 };
 
+const MechanicalJunkyard = async (db, data, res) => {
+  data.Team_key = data.Team_name.toUpperCase();
+  const formData = new MechanicalJunkyardModel(data);
+  try {
+    await formData.validate();
+  }
+  catch (error) {
+    return res
+      .status(405)
+      .json({ ok: false, message: "Error validating form data", error: error });
+  }
+
+  try {
+    const collection = db.collection("MechanicalJunkyard_Registration");
+
+    async function check_number(number, collection) {
+      const c1 = await collection.findOne({ Leader_whatsapp: number });
+      const c2 = await collection.findOne({ P2_number: number });
+      const c3 = await collection.findOne({ P3_number: number });
+      const c4 = await collection.findOne({ P4_number: number });
+      return c1 == null && c2 == null && c3 == null && c4 == null;
+    }
+
+    if (!(await check_number(data.Leader_whatsapp, collection))) {
+      return res.status(405).json({
+        ok: false,
+        message: `Leader(${data.Leader_whatsapp}) is already in a team`,
+      });
+    }
+    if (!(await check_number(data.P2_number, collection))) {
+      return res.status(405).json({
+        ok: false,
+        message: `P2(${data.P2_number}) is already in a team`,
+      });
+    }
+    if (data.P3_number !== "" && !(await check_number(data.P3_number, collection))) {
+      return res.status(405).json({
+        ok: false,
+        message: `P3(${data.P3_number}) is already in a team`,
+      });
+    }
+    if (data.P4_number !== "" && !(await check_number(data.P4_number, collection))) {
+      return res.status(405).json({
+        ok: false,
+        message: `P4(${data.P4_number}) is already in a team`,
+      });
+    }
+
+    const result = await collection.insertOne(formData.toObject());
+    if (result.acknowledged) {
+      return res
+        .status(200)
+        .json({ ok: true, message: "Registered Successfully" });
+    } else {
+      return res.status(400).json({ ok: false, message: "Couldn't Register" });
+    }
+  }
+  catch (error) {
+    return res
+      .status(500)
+      .json({ ok: false, message: "Internal Server Error", error: error });
+  }
+}
+
 const Register = async (req, res) => {
   const event = req.query.event;
   const db = req.db;
@@ -972,7 +1037,11 @@ const Register = async (req, res) => {
     await ReactionRacing(db, data, res);
   } else if (event === "Ecopolis") {
     await Ecopolis(db, data, res);
-  } else return res.status(200);
+  }
+  else if (event === "MechanicalJunkyard") {
+    await MechanicalJunkyard(db, data, res);
+  }
+  else return res.status(200);
 };
 
 module.exports = { Register, register_bgmi };

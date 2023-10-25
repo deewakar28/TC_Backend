@@ -957,6 +957,118 @@ const EcopolisSchema = new mongoose.Schema({
   },
 });
 
+const MechanicalJunkyardSchema = new mongoose.Schema({
+  Team_key: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true
+  },
+  Team_name: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  Leader_name: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  Leader_branch: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  Leader_semester: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  Leader_whatsapp: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
+  },
+  Leader_email: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
+  },
+  P2_name: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  P2_branch: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  P2_semester: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  P2_number: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true
+  },
+  P2_email: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true
+  },
+  P3_name: {
+    type: String,
+    trim: true,
+  },
+  P3_branch: {
+    type: String,
+    trim: true,
+  },
+  P3_semester: {
+    type: String,
+    trim: true,
+  },
+  P3_number: {
+    type: String,
+    trim: true,
+    unique: true
+  },
+  P3_email: {
+    type: String,
+    trim: true,
+    unique: true
+  },
+  P4_name: {
+    type: String,
+    trim: true,
+  },
+  P4_branch: {
+    type: String,
+    trim: true,
+  },
+  P4_semester: {
+    type: String,
+    trim: true,
+  },
+  P4_number: {
+    type: String,
+    trim: true,
+    unique: true
+  },
+  P4_email: {
+    type: String,
+    trim: true,
+    unique: true
+  }
+})
+
 const RoboSoccerModel = mongoose.model(
   "RoboSoccer",
   RoboSoccerSchema,
@@ -1024,6 +1136,8 @@ const EcopolisModel = mongoose.model(
   "Eceopolis_registration"
 )
 
+const MechanicalJunkyardModel = mongoose.model("MechanicalJunkyardModel", MechanicalJunkyardSchema, "MechanicalJunkyard_Registration")
+
 module.exports = {
   RoboSoccerModel,
   BGMIModel,
@@ -1039,4 +1153,5 @@ module.exports = {
   ReactionRacingModel,
   SurvivalModel,
   EcopolisModel,
+  MechanicalJunkyardModel
 };
