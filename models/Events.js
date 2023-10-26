@@ -1061,7 +1061,83 @@ const MechanicalJunkyardSchema = new mongoose.Schema({
     trim: true,
     unique: true
   }
-})
+});
+
+const HydroliftSchema = new mongoose.Schema({
+  Leader_name: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  Leader_whatsapp: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
+  },
+  Leader_branch: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  Leader_year: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  Leader_college: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  P2_name: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  P2_whatsapp: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
+  },
+  P2_branch: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  P2_year: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  P2_college: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  P3_name: {
+    type: String,
+    trim: true,
+  },
+  P3_whatsapp: {
+    type: String,
+    trim: true,
+    unique: true,
+  },
+  P3_branch: {
+    type: String,
+    trim: true,
+  },
+  P3_year: {
+    type: String,
+    trim: true,
+  },
+  P3_college: {
+    type: String,
+    trim: true,
+  },
+});
 
 const RoboSoccerModel = mongoose.model(
   "RoboSoccer",
@@ -1127,8 +1203,13 @@ const ReactionRacingModel = mongoose.model(
 const EcopolisModel = mongoose.model(
   "Ecopolis Model",
   EcopolisSchema,
-  "Eceopolis_registration"
-)
+  "Ecopolis_registration"
+);
+const HydroliftModel = mongoose.model(
+  "Hydrolift Model",
+  HydroliftSchema,
+  "Hydropolis_registration"
+);
 
 const MechanicalJunkyardModel = mongoose.model("MechanicalJunkyardModel", MechanicalJunkyardSchema, "MechanicalJunkyard_Registration")
 
@@ -1147,5 +1228,6 @@ module.exports = {
   ReactionRacingModel,
   SurvivalModel,
   EcopolisModel,
-  MechanicalJunkyardModel
+  MechanicalJunkyardModel,
+  HydroliftModel,
 };

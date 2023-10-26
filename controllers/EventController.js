@@ -13,7 +13,8 @@ const {
   ReactionRacingModel,
   SurvivalModel,
   EcopolisModel,
-  MechanicalJunkyardModel
+  MechanicalJunkyardModel,
+  HydroliftModel,
 } = require("../models/Events");
 
 const TerrainTreader = async (db, data, res) => {
@@ -1002,6 +1003,57 @@ const MechanicalJunkyard = async (db, data, res) => {
   }
 }
 
+const Hydrolift = async (db, data, res) => {
+  const formData = new HydroliftModel(data);
+  try {
+    await formData.validate();
+  } catch (error) {
+    return res
+      .status(405)
+      .json({ ok: false, message: "Error validating form data", error: error });
+  }
+  
+  try {
+    const coll = db.collection("Hydrolift_registration");
+    const leaderPresent = await coll.findOne({
+      Leader_whatsapp: data.Leader_whatsapp,
+    });
+    if (leaderPresent) {
+      return res.status(405).json({
+        ok: false,
+        message: "Leader with same Phone Number exists",
+      });
+    }
+    if ((await coll.findOne({ P2_whatsapp: data.P2_whatsapp }))
+    ) {
+      return res.status(405).json({
+        ok: false,
+        message: `P2 (${data.P2_whatsapp}) is already in a team`,
+      });
+    }
+    if (data.P3_whatsapp !== "" && (await coll.findOne({ P3_whatsapp: data.P3_whatsapp }))
+    ) {
+      return res.status(405).json({
+        ok: false,
+        message: `P3 (${data.P3_whatsapp}) is already in a team`,
+      });
+    }
+
+    const result = await coll.insertOne(formData.toObject());
+    if (result.acknowledged) {
+      return res
+        .status(200)
+        .json({ ok: true, message: "Registered Successfully" });
+    } else {
+      return res.status(400).json({ ok: false, message: "Couldn't Register" });
+    }
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ ok: false, message: "Internal Server Error", error: error });
+  }
+};
+
 const Register = async (req, res) => {
   const event = req.query.event;
   const db = req.db;
@@ -1037,11 +1089,11 @@ const Register = async (req, res) => {
     await ReactionRacing(db, data, res);
   } else if (event === "Ecopolis") {
     await Ecopolis(db, data, res);
-  }
-  else if (event === "MechanicalJunkyard") {
+  } else if (event === "MechanicalJunkyard") {
     await MechanicalJunkyard(db, data, res);
-  }
-  else return res.status(200);
+  } else if (event === "Hydrolift") {
+    await Hydrolift(db, data, res);
+  } else return res.status(200);
 };
 
 module.exports = { Register, register_bgmi };
