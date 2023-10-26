@@ -1020,8 +1020,8 @@ const Hydrolift = async (db, data, res) => {
 
     async function check_number(number, collection) {
       const c1 = await collection.findOne({ Leader_whatsapp: number });
-      const c2 = await collection.findOne({ P2_number: number });
-      const c3 = await collection.findOne({ P3_number: number });
+      const c2 = await collection.findOne({ P2_whatsapp: number });
+      const c3 = await collection.findOne({ P3_whatsapp: number });
       return c1 == null && c2 == null && c3 == null;
     }
 
@@ -1031,16 +1031,16 @@ const Hydrolift = async (db, data, res) => {
         message: `Leader(${data.Leader_whatsapp}) is already in a team`,
       });
     }
-    if (!(await check_number(data.P2_number, collection))) {
+    if (!(await check_number(data.P2_whatsapp, collection))) {
       return res.status(405).json({
         ok: false,
-        message: `P2(${data.P2_number}) is already in a team`,
+        message: `P2(${data.P2_whatsapp}) is already in a team`,
       });
     }
-    if (data.P3_number !== "" && !(await check_number(data.P3_number, collection))) {
+    if (data.P3_whatsapp !== "" && !(await check_number(data.P3_whatsapp, collection))) {
       return res.status(405).json({
         ok: false,
-        message: `P3(${data.P3_number}) is already in a team`,
+        message: `P3(${data.P3_whatsapp}) is already in a team`,
       });
     }
 
