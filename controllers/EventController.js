@@ -1005,7 +1005,7 @@ const MechanicalJunkyard = async (db, data, res) => {
 
 const Hydrolift = async (db, data, res) => {
   data.Team_key = data.Team_name.toUpperCase();
-  const formData = new MechanicalJunkyardModel(data);
+  const formData = new HydroliftModel(data);
   try {
     await formData.validate();
   }
