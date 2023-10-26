@@ -1037,11 +1037,9 @@ const Register = async (req, res) => {
     await ReactionRacing(db, data, res);
   } else if (event === "Ecopolis") {
     await Ecopolis(db, data, res);
-  }
-  else if (event === "MechanicalJunkyard") {
+  } else if (event === "MechanicalJunkyard") {
     await MechanicalJunkyard(db, data, res);
-  }
-  else return res.status(200);
+  } else return res.status(200);
 };
 
 module.exports = { Register, register_bgmi };

@@ -1127,7 +1127,7 @@ const ReactionRacingModel = mongoose.model(
 const EcopolisModel = mongoose.model(
   "Ecopolis Model",
   EcopolisSchema,
-  "Eceopolis_registration"
+  "Ecopolis_registration"
 )
 
 const MechanicalJunkyardModel = mongoose.model("MechanicalJunkyardModel", MechanicalJunkyardSchema, "MechanicalJunkyard_Registration")
