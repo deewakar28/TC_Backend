@@ -13,7 +13,8 @@ const {
   ReactionRacingModel,
   SurvivalModel,
   EcopolisModel,
-  MechanicalJunkyardModel
+  MechanicalJunkyardModel,
+  HydroliftModel,
 } = require("../models/Events");
 
 const TerrainTreader = async (db, data, res) => {
@@ -1094,11 +1095,11 @@ const Register = async (req, res) => {
     await ReactionRacing(db, data, res);
   } else if (event === "Ecopolis") {
     await Ecopolis(db, data, res);
-  }
-  else if (event === "MechanicalJunkyard") {
+  } else if (event === "MechanicalJunkyard") {
     await MechanicalJunkyard(db, data, res);
-  }
-  else return res.status(200);
+  } else if (event === "Hydrolift") {
+    await Hydrolift(db, data, res);
+  } else return res.status(200);
 };
 
 module.exports = { Register, register_bgmi };
