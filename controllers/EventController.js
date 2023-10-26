@@ -947,7 +947,7 @@ const MechanicalJunkyard = async (db, data, res) => {
   catch (error) {
     return res
       .status(405)
-      .json({ ok: false, message: "Error validating form data", error: error });
+      .json({ ok: false, message: "Please fill the form correctly", error: error });
   }
 
   try {
@@ -983,6 +983,63 @@ const MechanicalJunkyard = async (db, data, res) => {
       return res.status(405).json({
         ok: false,
         message: `P4(${data.P4_number}) is already in a team`,
+      });
+    }
+
+    const result = await collection.insertOne(formData.toObject());
+    if (result.acknowledged) {
+      return res
+        .status(200)
+        .json({ ok: true, message: "Registered Successfully" });
+    } else {
+      return res.status(400).json({ ok: false, message: "Couldn't Register" });
+    }
+  }
+  catch (error) {
+    return res
+      .status(500)
+      .json({ ok: false, message: "Internal Server Error", error: error });
+  }
+}
+
+const Hydrolift = async (db, data, res) => {
+  data.Team_key = data.Team_name.toUpperCase();
+  const formData = new MechanicalJunkyardModel(data);
+  try {
+    await formData.validate();
+  }
+  catch (error) {
+    return res
+      .status(405)
+      .json({ ok: false, message: "Please fill the form correctly", error: error });
+  }
+
+  try {
+    const collection = db.collection("Hydrolift_Registration");
+
+    async function check_number(number, collection) {
+      const c1 = await collection.findOne({ Leader_whatsapp: number });
+      const c2 = await collection.findOne({ P2_number: number });
+      const c3 = await collection.findOne({ P3_number: number });
+      return c1 == null && c2 == null && c3 == null;
+    }
+
+    if (!(await check_number(data.Leader_whatsapp, collection))) {
+      return res.status(405).json({
+        ok: false,
+        message: `Leader(${data.Leader_whatsapp}) is already in a team`,
+      });
+    }
+    if (!(await check_number(data.P2_number, collection))) {
+      return res.status(405).json({
+        ok: false,
+        message: `P2(${data.P2_number}) is already in a team`,
+      });
+    }
+    if (data.P3_number !== "" && !(await check_number(data.P3_number, collection))) {
+      return res.status(405).json({
+        ok: false,
+        message: `P3(${data.P3_number}) is already in a team`,
       });
     }
 
