@@ -925,34 +925,28 @@ const EcopolisSchema = new mongoose.Schema({
   },
   P2_name: {
     type: String,
-    required: true,
     trim: true,
   },
   P2_number: {
     type: String,
-    required: true,
     trim: true,
     unique: true,
   },
   P2_semester: {
     type: String,
-    required: true,
     trim: true,
   },
   P3_name: {
     type: String,
-    required: true,
     trim: true,
   },
   P3_number: {
     type: String,
-    required: true,
     trim: true,
     unique: true,
   },
   P3_semester: {
     type: String,
-    required: true,
     trim: true,
   },
 });
