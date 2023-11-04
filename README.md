@@ -26,3 +26,13 @@ Step 4: To start the server locally:
 ```bash
 npm start
 ```
+
+[contributors-url]: https://github.com/NITRR-Technocracy/TC_Backend/graphs/contributors
+[forks-url]: https://github.com/NITRR-Technocracy/TC_Backend/network/members
+[stars-url]: https://github.com/NITRR-Technocracy/TC_Backend/stargazers
+[issues-url]: https://github.com/NITRR-Technocracy/TC_Backend/issues
+
+[contributors-shield]: https://img.shields.io/github/contributors/NITRR-Technocracy/TC_Backend?style=for-the-badge
+[forks-shield]: https://img.shields.io/github/forks/NITRR-Technocracy/TC_Backend?style=for-the-badge
+[issues-shield]: https://img.shields.io/github/issues/NITRR-Technocracy/TC_Backend?style=for-the-badge
+[stars-shield]: https://img.shields.io/github/stars/NITRR-Technocracy/TC_Backend?style=for-the-badge
