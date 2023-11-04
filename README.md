@@ -1,5 +1,10 @@
 # TC_Backend
 
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
+
 ## Developer
 
 Use the latest version of node -> `v19.6.1`
