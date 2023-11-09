@@ -2,10 +2,10 @@ import { Db, MongoClient } from "mongodb"
 require('dotenv').config()
 
 const connectionString: string = process.env.MONGODB_URI as string
+console.log(connectionString);
 const db: string = process.env.DB as string
 const client = new MongoClient(connectionString)
 
-console.log(connectionString);
 
 let dbInstance: Db | null = null;
 
