@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, Response } from 'express';
 import { CustomRequest } from '..';
 
 const checkDBConnection = (req: CustomRequest, res: Response, next: NextFunction) => {
