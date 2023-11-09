@@ -5,6 +5,8 @@ const connectionString: string = process.env.MONGODB_URI as string
 const db: string = process.env.DB as string
 const client = new MongoClient(connectionString)
 
+console.log(connectionString);
+
 let dbInstance: Db | null = null;
 
 export default async function connectToDatabase(): Promise<Db | null> {
