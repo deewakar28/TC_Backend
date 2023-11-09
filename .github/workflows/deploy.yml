@@ -3,7 +3,7 @@ name: Deploy
 on:
   push:
     branches:
-      - main
+      - main-ts
 
 env:
   CI: false
@@ -22,7 +22,7 @@ jobs:
         PEM: ${{secrets.PEM}}
 
     - name: Doing the magic now
-      run: ssh -o StrictHostKeyChecking=no -i techno.pem ec2-user@ec2-3-111-170-203.ap-south-1.compute.amazonaws.com "cd TC_Backend && git pull && npm install && pm2 restart 0 && sudo systemctl restart nginx"
+      run: ssh -o StrictHostKeyChecking=no -i techno.pem ec2-user@ec2-3-111-170-203.ap-south-1.compute.amazonaws.com "cd TC_Backend && git pull && yarn install && pm2 restart 0 && sudo systemctl restart nginx"
 
     - name: LIVE!!!
       run: echo "Server Ready🚀🚀🚀"
