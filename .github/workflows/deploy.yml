@@ -28,11 +28,14 @@ jobs:
         PEM: ${{secrets.PEM}}
 
     - name: Removing older build
-      run: ssh -o StrictHostKeyChecking=no -i techno.pem ec2-user@ec2-3-111-170-203.ap-south-1.compute.amazonaws.com "cd TC_Backend && sudo rm -r build && mkdir build"
+      run: ssh -o StrictHostKeyChecking=no -i techno.pem ec2-user@ec2-3-111-170-203.ap-south-1.compute.amazonaws.com "cd TC_Backend && sudo rm -r build/* && sudo rm -r node_modules/*"
 
     - name: Copying new build
       run: scp -o StrictHostKeyChecking=no -i techno.pem -r build/* ec2-user@ec2-3-111-170-203.ap-south-1.compute.amazonaws.com:/home/ec2-user/TC_Backend/build
 
+    - name: Copy dependencies to server
+      run: scp -o StrictHostKeyChecking=no -i techno.pem -r node_modules/* ec2-user@ec2-3-111-170-203.ap-south-1.compute.amazonaws.com:/home/ec2-user/TC_Backend/node_modules
+      
     - name: Doing the magic now
       run: ssh -o StrictHostKeyChecking=no -i techno.pem ec2-user@ec2-3-111-170-203.ap-south-1.compute.amazonaws.com "pm2 restart 0 && sudo systemctl restart nginx"
 
