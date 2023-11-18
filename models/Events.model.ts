@@ -1,6 +1,48 @@
 import mongoose from "mongoose";
 
+const TerrainTreaderSchema = new mongoose.Schema({
+  Team_key: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
+  },
+  Team_name: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
+  },
+  Leader_name: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  Leader_whatsapp: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
+  },
+  Leader_branch: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  Leader_yog: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+});
+
 const RoboSoccerSchema = new mongoose.Schema({
+  Team_key: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
+  },
   Team_name: {
     type: String,
     required: true,
@@ -376,10 +418,10 @@ const ValorantSchema = new mongoose.Schema({
     trim: true,
     unique: true,
   },
-  Payment: {
-    type: String,
-    required: true,
-  },
+  // Payment: {
+  //   type: String,
+  //   required: true,
+  // },
 });
 
 const AutocadSchema = new mongoose.Schema({
@@ -464,27 +506,50 @@ const AutocadSchema = new mongoose.Schema({
   },
 });
 
+const testSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    trim: true,
+  },
+  phone: {
+    type: Number,
+    unique: true
+  },
+  username: {
+    type: String,
+    trim: true,
+    unique: true,
+  },
+});
+
+const testModel = mongoose.model("Test", testSchema, "Test_reg");
+
 const RoboSoccerModel = mongoose.model(
   "RoboSoccer",
   RoboSoccerSchema,
   "RoboSoccer_registration"
 );
+
 const BGMIModel = mongoose.model("BGMI", BGMISchema, "BGMI_registration");
+
 const AerofiliaModel = mongoose.model(
   "Aerofilia",
   AEROFILIA,
   "Aerofilia_registration"
 );
+
 const LogoDesignModel = mongoose.model(
   "LogoDesign",
   LogoDesign,
   "LogoDesign_registration"
 );
+
 const CircuitrixModel = mongoose.model(
   "Circuitrix",
   CircuitrixSchema,
   "Circuitrix_registration"
 );
+
 const ValorantModel = mongoose.model(
   "Valorant",
   ValorantSchema,
@@ -497,6 +562,8 @@ const AutocadModel = mongoose.model(
   "Autocad_registration"
 );
 
+const TerrainTreaderModel = mongoose.model("TerrainTreader", TerrainTreaderSchema, "TerrainTreader_Registration");
+
 export {
   RoboSoccerModel,
   BGMIModel,
@@ -505,4 +572,6 @@ export {
   CircuitrixModel,
   ValorantModel,
   AutocadModel,
+  TerrainTreaderModel,
+  testModel,
 };

@@ -1,23 +1,25 @@
-import { Db, MongoClient } from "mongodb"
-require('dotenv').config()
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+dotenv.config();
 
-const connectionString: string = process.env.MONGODB_URI as string
-const db: string = process.env.DB as string
-const client = new MongoClient(connectionString)
+const connectionString: string = process.env.MONGODB_URI as string + "/" + process.env.DB_TEST as string;
+// const db: string = process.env.DB as string
+// let dbInstance;
 
-
-let dbInstance: Db | null = null;
-
-export default async function connectToDatabase(): Promise<Db | null> {
-  if (!dbInstance) {
-    try {
-      await client.connect();
-      console.log("Connected to MongoDB");
-      dbInstance = client.db(db);
-    } catch (e) {
-      console.error("Error connecting to MongoDB Atlas:", e);
-    }
+export default async function connectToDatabase(): Promise<void> {
+  try {
+    await mongoose.connect(connectionString);
+    console.log("Connected to MongoDB");
+  } catch (error) {
+    console.log("Error connecting to MongoDB Atlas:", error);
   }
+}
 
-  return dbInstance;
+export async function closeDatabaseConnection(): Promise<void> {
+  try {
+    await mongoose.connection.close();
+    console.log("Disconnected from MongoDB");
+  } catch (error) {
+    console.log("Error disconnecting from MongoDB:", error);
+  }
 }
