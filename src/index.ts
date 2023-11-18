@@ -5,15 +5,15 @@ import bodyParser from "body-parser";
 import connectToDatabase from "./db/conn";
 import { Db } from "mongodb";
 import admin from "firebase-admin";
-import VigyaanRoutes from "./routes/Vigyaan.routes";
-import EventRoutes from "./routes/Event.routes";
-import AdminRoutes from "./routes/Admin.routes";
+import VigyaanRoutes from "./routes/Vigyaan.route";
+import EventRoutes from "./routes/Event.route";
+import AdminRoutes from "./routes/Admin.route";
 
 const app: express.Application = express();
 const PORT: number = 5000;
 
 const limiter = rateLimit({
-  max: 5,
+  max: 10,
   windowMs: 60 * 1000,
   // message: "Too many request from this IP",
   handler: (req, res) => {

@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 dotenv.config();
 
-const connectionString: string = process.env.MONGODB_URI as string + "/" + process.env.DB_TEST as string;
+const connectionString: string = process.env.MONGODB_URI as string + "/" + process.env.DB as string;
 // const db: string = process.env.DB as string
 // let dbInstance;
 
