@@ -3,3 +3,4 @@ node_modules/
 utils/
 build/
 coverage/
+firebase_keys.json

@@ -17,10 +17,10 @@ const limiter = rateLimit({
   windowMs: 60 * 1000,
   // message: "Too many request from this IP",
   handler: (req, res) => {
-    res.status(429).json(
-      { error: "Rate limit exceeded",
-        message: "Too many requests from this IP" 
-      });
+    res.status(429).json({
+      error: "Rate limit exceeded",
+      message: "Too many requests from this IP",
+    });
   },
 });
 
@@ -63,8 +63,7 @@ try {
   if (process.env.NODE_ENV !== "test") {
     connectToDatabase();
   }
-}
-catch (error) {
+} catch (error) {
   console.error("Error connecting to the database:", error);
 }
 
@@ -73,13 +72,13 @@ app.use((req: CustomRequest, res: Response, next: NextFunction) => {
   next();
 });
 
-app.get("/api/v2", (req: Request, res: Response) => {
+app.get("/api/2024", (req: Request, res: Response) => {
   res.send("Server running successfully");
 });
 
-app.use("/api/v2", VigyaanRoutes);
-app.use("/api/v2", EventRoutes);
-app.use("/api/v2", AdminRoutes);
+app.use("/api/2024", VigyaanRoutes);
+app.use("/api/2024", EventRoutes);
+app.use("/api/2024", AdminRoutes);
 
 if (process.env.NODE_ENV !== "test") {
   app.listen(PORT, () => {

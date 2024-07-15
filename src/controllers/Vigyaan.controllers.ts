@@ -4,14 +4,14 @@ import { Response } from "express";
 import { Bucket } from "@google-cloud/storage";
 
 async function check_number_presence(number: string, collection: Collection) {
-  const c1 = await collection.findOne({"Leader_whatsapp": number});
-  const c2 = await collection.findOne({"Member2_whatsapp": number});
-  const c3 = await collection.findOne({"Member3_whatsapp": number});
-  return ((c1 == null) && (c2 == null) && (c3 == null));
+  const c1 = await collection.findOne({ Leader_whatsapp: number });
+  const c2 = await collection.findOne({ Member2_whatsapp: number });
+  const c3 = await collection.findOne({ Member3_whatsapp: number });
+  return c1 == null && c2 == null && c3 == null;
 }
 
 async function isValidProblem(problem: string, codes: Collection) {
-  const data = await codes.findOne({"Code": problem});
+  const data = await codes.findOne({ Code: problem });
   return data !== null;
 }
 
@@ -26,21 +26,40 @@ const vigyaanReg = async (req: CustomRequest, res: Response) => {
   data.Team_key = data.Team_name.toUpperCase();
   const specialCharacterPattern = /[!@#$%^&*()_+{}[\]:;<>,.?~\\|/]/;
   if (specialCharacterPattern.test(data.Team_name)) {
-    res.status(405).json({ok: false, message: "Team name can't contain special characters"});
+    res
+      .status(405)
+      .json({
+        ok: false,
+        message: "Team name can't contain special characters",
+      });
   }
 
   if (!(await check_number_presence(data.Leader_whatsapp, collection))) {
-    return res.status(405).json({ok: false, message: "Leader is already in a team"});
+    return res
+      .status(405)
+      .json({ ok: false, message: "Leader is already in a team" });
   }
   if (!(await check_number_presence(data.Member2_whatsapp, collection))) {
-    return res.status(405).json({ok: false, message: "Member 2 is already in a team"});
+    return res
+      .status(405)
+      .json({ ok: false, message: "Member 2 is already in a team" });
   }
-  if (data.Member3_whatsapp !== "" && !(await check_number_presence(data.Member3_whatsapp, collection))) {
-    return res.status(405).json({ok: false, message: "Member 3 is already in a team"});
+  if (
+    data.Member3_whatsapp !== "" &&
+    !(await check_number_presence(data.Member3_whatsapp, collection))
+  ) {
+    return res
+      .status(405)
+      .json({ ok: false, message: "Member 3 is already in a team" });
   }
 
   if (!(await isValidProblem(data.Problem_code, codes))) {
-    return res.status(405).json({ok: false, message: "Invalid problem code. Please check cases."});
+    return res
+      .status(405)
+      .json({
+        ok: false,
+        message: "Invalid problem code. Please check cases.",
+      });
   }
 
   if (!file) {
@@ -64,50 +83,68 @@ const vigyaanReg = async (req: CustomRequest, res: Response) => {
       expires: "03-09-2024",
     });
     data["Abstract"] = url;
-  }
-  catch (err) {
-    return res.status(500).json({ ok: false, message: "Error uploading abstract", error: err });
+  } catch (err) {
+    return res
+      .status(500)
+      .json({ ok: false, message: "Error uploading abstract", error: err });
   }
 
   // saving the team data to mongodb
   try {
     const collection = db.collection("vigyaan_registration");
-    const already = await collection.findOne({ "Team_key": data.Team_key });
+    const already = await collection.findOne({ Team_key: data.Team_key });
     if (!already) {
       await collection.insertOne(data);
       const present = await collection.findOne(data);
       if (present) {
         res.status(200).json({ ok: true, message: "Registered Successfully" });
-      }
-      else {
+      } else {
         res.status(400).json({ ok: false, message: "Couldn't register" });
       }
+    } else {
+      res
+        .status(200)
+        .json({ ok: false, message: "The Team name is already taken" });
     }
-    else {
-      res.status(200).json({ ok: false, message: "The Team name is already taken" });
-    }
-  }
-  catch (err) {
-    res.status(500).json({ ok: false, message: "Internal Server Error", error: err });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ ok: false, message: "Internal Server Error", error: err });
   }
 };
 
 const getFileURL = async (req: CustomRequest, res: Response) => {
-  const folders: string[] = ["Architecture", "BIO-TECHNOLOGY ENGINEERING", "BIOMEDICAL ENGINEERING", "CHEMICAL ENGINEERING", "CIVIL ENGINEERING", "CSE_IT_MCA", "ELECTRICAL ENGINEERING", "ELECTRONICS AND COMMUNICATION ENGINEERING", "MECHANICAL ENGINEERING", "METALLURGICAL AND MATERIALS ENGINEERING", "MINING ENGINEERING"];
+  const folders: string[] = [
+    "Architecture",
+    "BIO-TECHNOLOGY ENGINEERING",
+    "BIOMEDICAL ENGINEERING",
+    "CHEMICAL ENGINEERING",
+    "CIVIL ENGINEERING",
+    "CSE_IT_MCA",
+    "ELECTRICAL ENGINEERING",
+    "ELECTRONICS AND COMMUNICATION ENGINEERING",
+    "MECHANICAL ENGINEERING",
+    "METALLURGICAL AND MATERIALS ENGINEERING",
+    "MINING ENGINEERING",
+  ];
 
   try {
     const db: Db = req.db!;
     let i = 0;
     const result: { [key: string]: string } = {};
-    const collection = await db.collection("vigyaan_statements").find().toArray();
-    collection.map(c => {
+    const collection = await db
+      .collection("vigyaan_statements")
+      .find()
+      .toArray();
+    collection.map((c) => {
       result[folders[i]] = c[folders[i]];
       i++;
     });
     return res.status(200).json({ ok: true, message: result });
-  }
-  catch (err) {
-    return res.status(500).json({ ok: false, message: "Internal Server Error", error: err });
+  } catch (err) {
+    return res
+      .status(500)
+      .json({ ok: false, message: "Internal Server Error", error: err });
   }
 };
 
@@ -129,13 +166,14 @@ const changeVigyaanFile = async (req: CustomRequest, res: Response) => {
 
   if (!file) {
     res.status(400).json({ ok: false, message: "No file found" });
-  }
-  else {
+  } else {
     try {
       const prefixToCheck = `${process.env.DB}/Vigyaan/Problem Statements/${branch}/`;
       const prefixExists = await checkPrefixExistence(bucket, prefixToCheck);
       if (prefixExists) {
-        await bucket.deleteFiles({ prefix: `${process.env.DB}/Vigyaan/Problem Statements/${branch}/` });
+        await bucket.deleteFiles({
+          prefix: `${process.env.DB}/Vigyaan/Problem Statements/${branch}/`,
+        });
       }
       const folderPath = `${process.env.DB}/Vigyaan/Problem Statements/${branch}/`;
       const fileName = `${file.originalname}`;
@@ -154,14 +192,18 @@ const changeVigyaanFile = async (req: CustomRequest, res: Response) => {
 
       const result = await collection.updateOne(filter, update);
       if (result.matchedCount === 1) {
-        res.status(200).json({ ok: true, message: "Document updated successfully." });
+        res
+          .status(200)
+          .json({ ok: true, message: "Document updated successfully." });
+      } else {
+        res
+          .status(400)
+          .json({ ok: false, message: "No documents matched the filter." });
       }
-      else {
-        res.status(400).json({ ok: false, message: "No documents matched the filter." });
-      }
-    }
-    catch (err) {
-      res.status(500).json({ ok: false, message: "Internal Server Error", error: err });
+    } catch (err) {
+      res
+        .status(500)
+        .json({ ok: false, message: "Internal Server Error", error: err });
     }
   }
 };
