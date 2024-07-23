@@ -135,7 +135,7 @@ const vigyaanReg = async (req: CustomRequest, res: Response) => {
   try {
     const admin = req.admin!;
     const bucket = admin.storage().bucket();
-    const folderPath = `${process.env.DB}/Vigyaan/Abstracts/${data.Team_key}/`;
+    const folderPath = `${process.env.DB}/Vigyaan/ppt/${data.Team_key}/`;
     const fileName = `${file.originalname}`;
     const fileUpload = bucket.file(`${folderPath}${fileName}`);
 
