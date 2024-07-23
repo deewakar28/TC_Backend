@@ -136,6 +136,11 @@ const VigyaanRegisSchema = new mongoose.Schema({
     trim: true,
     required: true,
   },
+  Abstract: {
+    type: String,
+    trim: true,
+    required: true,
+  },
 });
 const TerrainTreaderSchema = new mongoose.Schema({
   Team_key: {
