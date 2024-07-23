@@ -1,15 +1,11 @@
 import mongoose from "mongoose";
 
-
-
-
-
 const VigyaanProblemCodeSchema = new mongoose.Schema({
-    Code:{
-      type: String,
-      unique: true,
-      trim: true,
-    }
+  Code: {
+    type: String,
+    unique: true,
+    trim: true,
+  },
 });
 
 const VigyaanRegisSchema = new mongoose.Schema({
@@ -38,7 +34,7 @@ const VigyaanRegisSchema = new mongoose.Schema({
   Leader_rollNo: {
     type: String,
     required: true,
-    unique:true,
+    unique: true,
     trim: true,
   },
   Leader_branch: {
@@ -61,9 +57,9 @@ const VigyaanRegisSchema = new mongoose.Schema({
     type: String,
     trim: true,
     unique: true,
-    required:true,
+    required: true,
   },
-  Leader_college : {
+  Leader_college: {
     type: String,
     trim: true,
   },
@@ -92,7 +88,7 @@ const VigyaanRegisSchema = new mongoose.Schema({
     type: String,
     trim: true,
     unique: true,
-    required:true,
+    required: true,
   },
   Member2_college: {
     type: String,
@@ -122,12 +118,12 @@ const VigyaanRegisSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
-  Member3_rollNo : {
+  Member3_rollNo: {
     type: String,
     trim: true,
     unique: true,
   },
-  Member3_college : {
+  Member3_college: {
     type: String,
     trim: true,
   },
@@ -135,7 +131,7 @@ const VigyaanRegisSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
-  Problem_code : {
+  Problem_code: {
     type: String,
     trim: true,
     required: true,
@@ -654,7 +650,7 @@ const testSchema = new mongoose.Schema({
   },
   phone: {
     type: Number,
-    unique: true
+    unique: true,
   },
   username: {
     type: String,
@@ -707,13 +703,17 @@ const VigyaanModel = mongoose.model(
   VigyaanRegisSchema,
   "Vigyaan_registration"
 );
-const VigyaanProblemCodeModel  = mongoose.model(
+const VigyaanProblemCodeModel = mongoose.model(
   "VigyaanProblem",
   VigyaanProblemCodeSchema,
   "VigyaanProblemCode"
 );
 
-const TerrainTreaderModel = mongoose.model("TerrainTreader", TerrainTreaderSchema, "TerrainTreader_Registration");
+const TerrainTreaderModel = mongoose.model(
+  "TerrainTreader",
+  TerrainTreaderSchema,
+  "TerrainTreader_Registration"
+);
 
 export {
   RoboSoccerModel,
@@ -728,4 +728,3 @@ export {
   VigyaanProblemCodeModel,
   testModel,
 };
-
