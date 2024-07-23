@@ -12,6 +12,8 @@ import AdminRoutes from "./routes/Admin.route";
 const app: express.Application = express();
 const PORT: number = 5000;
 
+app.set("trust proxy", true);
+
 const limiter = rateLimit({
   max: 10,
   windowMs: 60 * 1000,
