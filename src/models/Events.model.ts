@@ -107,7 +107,7 @@ const VigyaanRegisSchema = new mongoose.Schema({
   Member3_whatsapp: {
     type: String,
     trim: true,
-    unique: true,
+    // unique: true,
   },
   Member3_email: {
     type: String,
