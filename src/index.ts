@@ -12,21 +12,21 @@ import AdminRoutes from "./routes/Admin.route";
 const app: express.Application = express();
 const PORT: number = 5000;
 
-app.set("trust proxy", true);
+// app.set("trust proxy", true);
 
-const limiter = rateLimit({
-  max: 10,
-  windowMs: 60 * 1000,
-  // message: "Too many request from this IP",
-  handler: (req, res) => {
-    res.status(429).json({
-      error: "Rate limit exceeded",
-      message: "Too many requests from this IP",
-    });
-  },
-});
+// const limiter = rateLimit({
+//   max: 10,
+//   windowMs: 60 * 1000,
+//   // message: "Too many request from this IP",
+//   handler: (req, res) => {
+//     res.status(429).json({
+//       error: "Rate limit exceeded",
+//       message: "Too many requests from this IP",
+//     });
+//   },
+// });
 
-app.use(limiter);
+// app.use(limiter);
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
