@@ -30,7 +30,7 @@ async function isValidProblem(problem: string) {
 
 const vigyaanReg = async (req: CustomRequest, res: Response) => {
   const file = req.file;
-  const data = req.body;
+  let data = req.body;
   delete data.file;
 
   data.Team_key = data.Team_name.toUpperCase();
@@ -159,6 +159,9 @@ const vigyaanReg = async (req: CustomRequest, res: Response) => {
   try {
     const already = await VigyaanModel.findOne({ Team_key: data.Team_key });
     if (!already) {
+      data = Object.fromEntries(
+        Object.entries(data).filter(([_, value]) => value !== "")
+      );
       const newRegistration = new VigyaanModel(data);
       await newRegistration.save();
       return res
