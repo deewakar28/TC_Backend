@@ -1,9 +1,8 @@
 import { Db } from "mongodb";
-import { CustomRequest } from ".."; 
+import { CustomRequest } from "..";
 import { Response } from "express";
 import { Bucket } from "@google-cloud/storage";
-import { VigyaanModel,VigyaanProblemCodeModel } from "../models/Events.model";
-
+import { VigyaanModel, VigyaanProblemCodeModel } from "../models/Events.model";
 
 async function check_number_presence(number: string) {
   const c1 = await VigyaanModel.findOne({ Leader_whatsapp: number });
@@ -12,21 +11,8 @@ async function check_number_presence(number: string) {
   return !c1 && !c2 && !c3;
 }
 
-
-// async function check_number_presence(number: string, collection: Collection) {
-//   const c1 = await collection.findOne({"Leader_whatsapp": number});
-//   const c2 = await collection.findOne({"Member2_whatsapp": number});
-//   const c3 = await collection.findOne({"Member3_whatsapp": number});
-//   return ((c1 == null) && (c2 == null) && (c3 == null));
-// }
-
-async function isValidProblem(problem: string) {
-  const data = await VigyaanProblemCodeModel.findOne({ Code: problem });
-  return data !== null;
-}
-
-// async function isValidProblem(problem: string, codes: Collection) {
-//   const data = await codes.findOne({"Code": problem});
+// async function isValidProblem(problem: string) {
+//   const data = await VigyaanProblemCodeModel.findOne({ Code: problem });
 //   return data !== null;
 // }
 
@@ -38,72 +24,101 @@ const vigyaanReg = async (req: CustomRequest, res: Response) => {
   data.Team_key = data.Team_name.toUpperCase();
   const specialCharacterPattern = /[!@#$%^&*()_+{}[\]:;<>,.?~\\|/]/;
   if (specialCharacterPattern.test(data.Team_name)) {
-    res.status(405).json({ok: false, message: "Team name can't contain special characters"});
+    res.status(405).json({
+      ok: false,
+      message: "Team name can't contain special characters",
+    });
   }
 
   if (!(await check_number_presence(data.Leader_whatsapp))) {
-    return res.status(405).json({ok: false, message: "Leader is already in a team"});
+    return res
+      .status(405)
+      .json({ ok: false, message: "Leader is already in a team" });
   }
   if (!(await check_number_presence(data.Member2_whatsapp))) {
-    return res.status(405).json({ok: false, message: "Member 2 is already in a team"});
+    return res
+      .status(405)
+      .json({ ok: false, message: "Member 2 is already in a team" });
   }
-  if (data.Member3_whatsapp !== "" && !(await check_number_presence(data.Member3_whatsapp))) {
-    return res.status(405).json({ok: false, message: "Member 3 is already in a team"});
+  if (
+    data.Member3_whatsapp !== "" &&
+    !(await check_number_presence(data.Member3_whatsapp))
+  ) {
+    return res
+      .status(405)
+      .json({ ok: false, message: "Member 3 is already in a team" });
   }
 
-  if (!(await isValidProblem(data.Problem_code))) {
-    return res.status(405).json({ok: false, message: "Invalid problem code. Please check cases."});
-  }
+  // if (!(await isValidProblem(data.Problem_code))) {
+  //   return res
+  //     .status(405)
+  //     .json({
+  //       ok: false,
+  //       message: "Invalid problem code. Please check cases.",
+  //     });
+  // }
 
   if (!file) {
     return res.status(405).json({ ok: false, message: "No file uploaded." });
   }
-  
-  
-  if (data.College_confirmation === 'yes') {
+
+  if (data.College_confirmation === "yes") {
     if (!data.College_email_Leader) {
-        return res.status(405).json({ ok: false, message: "College email ID is required" });
+      return res
+        .status(405)
+        .json({ ok: false, message: "College email ID is required" });
     }
-  } 
-  else if (data.College_confirmation === 'no') {
+  } else if (data.College_confirmation === "no") {
     if (!data.Email_Leader || !data.College_name_Leader) {
-        return res.status(405).json({ ok: false, message: "Email and College name are required" });
+      return res
+        .status(405)
+        .json({ ok: false, message: "Email and College name are required" });
     }
-  } 
-  else {
-    return res.status(405).json({ ok: false, message: "Invalid College confirmation choice" });
+  } else {
+    return res
+      .status(405)
+      .json({ ok: false, message: "Invalid College confirmation choice" });
   }
 
-  if (data.College_confirmation === 'yes') {
+  if (data.College_confirmation === "yes") {
     if (!data.College_email_Member2) {
-        return res.status(405).json({ ok: false, message: "College email ID is required" });
+      return res
+        .status(405)
+        .json({ ok: false, message: "College email ID is required" });
     }
-  } 
-  else if (data.College_confirmation === 'no') {
+  } else if (data.College_confirmation === "no") {
     if (!data.Email_Member2 || !data.College_name_Member2) {
-        return res.status(405).json({ ok: false, message: "Email and College name are required" });
+      return res
+        .status(405)
+        .json({ ok: false, message: "Email and College name are required" });
     }
-  } 
-  else {
-    return res.status(405).json({ ok: false, message: "Invalid College confirmation choice" });
+  } else {
+    return res
+      .status(405)
+      .json({ ok: false, message: "Invalid College confirmation choice" });
   }
 
-
-  if (data.College_confirmation === 'yes') {
-    if (data.Member3_whatsapp !== "" &&  !data.College_email_Member3) {
-        return res.status(405).json({ ok: false, message: "College email ID is required" });
+  if (data.College_confirmation === "yes") {
+    if (data.Member3_whatsapp !== "" && !data.College_email_Member3) {
+      return res
+        .status(405)
+        .json({ ok: false, message: "College email ID is required" });
     }
-  } 
-  else if (data.College_confirmation === 'no') {
-    if (data.Member3_whatsapp !== "" && (!data.Email_Member3 || !data.College_name_Member3)) {
-        return res.status(405).json({ ok: false, message: "Email and College name are required" });
+  } else if (data.College_confirmation === "no") {
+    if (
+      data.Member3_whatsapp !== "" &&
+      (!data.Email_Member3 || !data.College_name_Member3)
+    ) {
+      return res
+        .status(405)
+        .json({ ok: false, message: "Email and College name are required" });
     }
-  } 
-  else {
-    return res.status(405).json({ ok: false, message: "Invalid College confirmation choice" });
+  } else {
+    return res
+      .status(405)
+      .json({ ok: false, message: "Invalid College confirmation choice" });
   }
-  
-   
+
   // uploading the abstract file to firebase storage
   try {
     const admin = req.admin!;
@@ -121,27 +136,32 @@ const vigyaanReg = async (req: CustomRequest, res: Response) => {
       expires: "09-09-2024",
     });
     data["Abstract"] = url;
-  }
-  catch (err) {
-    return res.status(500).json({ ok: false, message: "Error uploading abstract", error: err });
+  } catch (err) {
+    return res
+      .status(500)
+      .json({ ok: false, message: "Error uploading abstract", error: err });
   }
 
   // saving the team data to mongodb
-  
+
   try {
     const already = await VigyaanModel.findOne({ Team_key: data.Team_key });
     if (!already) {
       const newRegistration = new VigyaanModel(data);
       await newRegistration.save();
-      return res.status(200).json({ ok: true, message: "Registered Successfully" });
+      return res
+        .status(200)
+        .json({ ok: true, message: "Registered Successfully" });
     } else {
-      return res.status(200).json({ ok: false, message: "The Team name is already taken" });
+      return res
+        .status(200)
+        .json({ ok: false, message: "The Team name is already taken" });
     }
   } catch (err) {
-    return res.status(500).json({ ok: false, message: "Internal Server Error", error: err });
+    return res
+      .status(500)
+      .json({ ok: false, message: "Internal Server Error", error: err });
   }
-
-
 
   // try {
   //   const collection = db.collection("vigyaan_registration");
@@ -166,21 +186,37 @@ const vigyaanReg = async (req: CustomRequest, res: Response) => {
 };
 
 const getFileURL = async (req: CustomRequest, res: Response) => {
-  const folders: string[] = ["Architecture", "BIO-TECHNOLOGY ENGINEERING", "BIOMEDICAL ENGINEERING", "CHEMICAL ENGINEERING", "CIVIL ENGINEERING", "CSE_IT_MCA", "ELECTRICAL ENGINEERING", "ELECTRONICS AND COMMUNICATION ENGINEERING", "MECHANICAL ENGINEERING", "METALLURGICAL AND MATERIALS ENGINEERING", "MINING ENGINEERING"];
+  const folders: string[] = [
+    "Architecture",
+    "BIO-TECHNOLOGY ENGINEERING",
+    "BIOMEDICAL ENGINEERING",
+    "CHEMICAL ENGINEERING",
+    "CIVIL ENGINEERING",
+    "CSE_IT_MCA",
+    "ELECTRICAL ENGINEERING",
+    "ELECTRONICS AND COMMUNICATION ENGINEERING",
+    "MECHANICAL ENGINEERING",
+    "METALLURGICAL AND MATERIALS ENGINEERING",
+    "MINING ENGINEERING",
+  ];
 
   try {
     const db: Db = req.db!;
     let i = 0;
     const result: { [key: string]: string } = {};
-    const collection = await db.collection("vigyaan_statements").find().toArray();
-    collection.map(c => {
+    const collection = await db
+      .collection("vigyaan_statements")
+      .find()
+      .toArray();
+    collection.map((c) => {
       result[folders[i]] = c[folders[i]];
       i++;
     });
     return res.status(200).json({ ok: true, message: result });
-  }
-  catch (err) {
-    return res.status(500).json({ ok: false, message: "Internal Server Error", error: err });
+  } catch (err) {
+    return res
+      .status(500)
+      .json({ ok: false, message: "Internal Server Error", error: err });
   }
 };
 
@@ -194,7 +230,7 @@ const changeVigyaanFile = async (req: CustomRequest, res: Response) => {
   if (password !== process.env.PASSWORD) {
     return res.status(401).json({ ok: false, message: "Wrong Password" });
   }
-  const db: Db = req.db!;  
+  const db: Db = req.db!;
   const admin = req.admin!;
   const collection = db.collection("vigyaan_statements");
   const bucket = admin.storage().bucket();
@@ -202,13 +238,14 @@ const changeVigyaanFile = async (req: CustomRequest, res: Response) => {
 
   if (!file) {
     res.status(400).json({ ok: false, message: "No file found" });
-  }
-  else {
+  } else {
     try {
       const prefixToCheck = `${process.env.DB}/Vigyaan/Problem Statements/${branch}/`;
       const prefixExists = await checkPrefixExistence(bucket, prefixToCheck);
       if (prefixExists) {
-        await bucket.deleteFiles({ prefix: `${process.env.DB}/Vigyaan/Problem Statements/${branch}/` });
+        await bucket.deleteFiles({
+          prefix: `${process.env.DB}/Vigyaan/Problem Statements/${branch}/`,
+        });
       }
       const folderPath = `${process.env.DB}/Vigyaan/Problem Statements/${branch}/`;
       const fileName = `${file.originalname}`;
@@ -227,18 +264,20 @@ const changeVigyaanFile = async (req: CustomRequest, res: Response) => {
 
       const result = await collection.updateOne(filter, update);
       if (result.matchedCount === 1) {
-        res.status(200).json({ ok: true, message: "Document updated successfully." });
+        res
+          .status(200)
+          .json({ ok: true, message: "Document updated successfully." });
+      } else {
+        res
+          .status(400)
+          .json({ ok: false, message: "No documents matched the filter." });
       }
-      else {
-        res.status(400).json({ ok: false, message: "No documents matched the filter." });
-      }
-    }
-    catch (err) {
-      res.status(500).json({ ok: false, message: "Internal Server Error", error: err });
+    } catch (err) {
+      res
+        .status(500)
+        .json({ ok: false, message: "Internal Server Error", error: err });
     }
   }
 };
 
-
-
-export { vigyaanReg, getFileURL,changeVigyaanFile};
+export { vigyaanReg, getFileURL, changeVigyaanFile };
