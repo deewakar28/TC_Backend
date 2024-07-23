@@ -160,7 +160,7 @@ const vigyaanReg = async (req: CustomRequest, res: Response) => {
     const already = await VigyaanModel.findOne({ Team_key: data.Team_key });
     if (!already) {
       data = Object.fromEntries(
-        Object.entries(data).filter(([_, value]) => value !== "")
+        Object.entries(data).filter(([_, value]) => value !== "" && value)
       );
       const newRegistration = new VigyaanModel(data);
       await newRegistration.save();
