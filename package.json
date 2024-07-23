@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest --detectOpenHandles --testTimeout=5000",
     "start": "nodemon ./src/index.ts",
-    "build": "webpack"
+    "build": "webpack",
+    "start:prod": "node build/src/index.js"
   },
   "author": "",
   "license": "ISC",
