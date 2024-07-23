@@ -1,11 +1,15 @@
 import mongoose from "mongoose";
 
+
+
+
+
 const VigyaanProblemCodeSchema = new mongoose.Schema({
-  Code: {
-    type: String,
-    unique: true,
-    trim: true,
-  },
+    Code:{
+      type: String,
+      unique: true,
+      trim: true,
+    }
 });
 
 const VigyaanRegisSchema = new mongoose.Schema({
@@ -21,12 +25,28 @@ const VigyaanRegisSchema = new mongoose.Schema({
     trim: true,
     unique: true,
   },
-  College_confirmation: {
+  isNITRR: {
     type: String,
     required: true,
     trim: true,
   },
   Leader_name: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  Leader_rollNo: {
+    type: String,
+    required: true,
+    unique:true,
+    trim: true,
+  },
+  Leader_branch: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  Leader_year: {
     type: String,
     required: true,
     trim: true,
@@ -37,26 +57,27 @@ const VigyaanRegisSchema = new mongoose.Schema({
     trim: true,
     unique: true,
   },
-  College_email_Leader: {
+  Leader_email: {
     type: String,
     trim: true,
     unique: true,
+    required:true,
   },
-  Email_Leader: {
-    type: String,
-    trim: true,
-    unique: true,
-  },
-  College_name_Leader: {
+  Leader_college : {
     type: String,
     trim: true,
   },
-  Leader_branch: {
+  Member2_name: {
     type: String,
     required: true,
     trim: true,
   },
-  Member2_name: {
+  Member2_branch: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  Member2_year: {
     type: String,
     required: true,
     trim: true,
@@ -67,24 +88,21 @@ const VigyaanRegisSchema = new mongoose.Schema({
     trim: true,
     unique: true,
   },
-  College_email_Member2: {
+  Member2_email: {
     type: String,
     trim: true,
     unique: true,
+    required:true,
   },
-  Email_Member2: {
-    type: String,
-    trim: true,
-    unique: true,
-  },
-  College_name_Member2: {
+  Member2_college: {
     type: String,
     trim: true,
   },
-  Member2_branch: {
+  Member2_rollNo: {
     type: String,
+    trim: true,
     required: true,
-    trim: true,
+    unique: true,
   },
   Member3_name: {
     type: String,
@@ -95,17 +113,21 @@ const VigyaanRegisSchema = new mongoose.Schema({
     trim: true,
     unique: true,
   },
-  College_email_Member3: {
+  Member3_email: {
     type: String,
     trim: true,
     unique: true,
   },
-  Email_Member3: {
+  Member3_year: {
+    type: String,
+    trim: true,
+  },
+  Member3_rollNo : {
     type: String,
     trim: true,
     unique: true,
   },
-  College_name_Member3: {
+  Member3_college : {
     type: String,
     trim: true,
   },
@@ -113,25 +135,12 @@ const VigyaanRegisSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
-  Problem_code: {
+  Problem_code : {
     type: String,
     trim: true,
     required: true,
-  },
-  password: {
-    type: String,
-    required: true,
-    unique: true,
-    trim: true,
-  },
-  confirmPassword: {
-    type: String,
-    required: true,
-    unique: true,
-    trim: true,
   },
 });
-
 const TerrainTreaderSchema = new mongoose.Schema({
   Team_key: {
     type: String,
@@ -645,7 +654,7 @@ const testSchema = new mongoose.Schema({
   },
   phone: {
     type: Number,
-    unique: true,
+    unique: true
   },
   username: {
     type: String,
@@ -687,28 +696,24 @@ const ValorantModel = mongoose.model(
   ValorantSchema,
   "Valorant_registration"
 );
-const VigyaanModel = mongoose.model(
-  "Vigyaan",
-  VigyaanRegisSchema,
-  "Vigyaan_registration"
-);
-const VigyaanProblemCodeModel = mongoose.model(
-  "VigyaanProblem",
-  VigyaanProblemCodeSchema,
-  "VigyaanProblemCode"
-);
 
 const AutocadModel = mongoose.model(
   "Autocad",
   AutocadSchema,
   "Autocad_registration"
 );
-
-const TerrainTreaderModel = mongoose.model(
-  "TerrainTreader",
-  TerrainTreaderSchema,
-  "TerrainTreader_Registration"
+const VigyaanModel = mongoose.model(
+  "Vigyaan",
+  VigyaanRegisSchema,
+  "Vigyaan_registration"
 );
+const VigyaanProblemCodeModel  = mongoose.model(
+  "VigyaanProblem",
+  VigyaanProblemCodeSchema,
+  "VigyaanProblemCode"
+);
+
+const TerrainTreaderModel = mongoose.model("TerrainTreader", TerrainTreaderSchema, "TerrainTreader_Registration");
 
 export {
   RoboSoccerModel,
@@ -723,3 +728,4 @@ export {
   VigyaanProblemCodeModel,
   testModel,
 };
+
