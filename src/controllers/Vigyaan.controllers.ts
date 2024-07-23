@@ -92,13 +92,13 @@ const vigyaanReg = async (req: CustomRequest, res: Response) => {
       .json({ ok: false, message: "Invalid College confirmation choice" });
   }
 
-  if (data.isNITRR === "Y") {
+  if (data.isNITRR === "Yes") {
     if (!data.Member2_email) {
       return res
         .status(405)
         .json({ ok: false, message: "College email ID is required" });
     }
-  } else if (data.isNITRR === "N") {
+  } else if (data.isNITRR === "No") {
     if (!data.Member2_email || !data.Member2_college) {
       return res
         .status(405)
@@ -110,13 +110,13 @@ const vigyaanReg = async (req: CustomRequest, res: Response) => {
       .json({ ok: false, message: "Invalid College confirmation choice" });
   }
 
-  if (data.isNITRR === "Y") {
+  if (data.isNITRR === "Yes") {
     if (data.Member3_whatsapp !== "" && !data.Member3_email) {
       return res
         .status(405)
         .json({ ok: false, message: "College email ID is required" });
     }
-  } else if (data.isNITRR === "N") {
+  } else if (data.isNITRR === "No") {
     if (
       data.Member3_whatsapp !== "" &&
       (!data.Member3_email || !data.Member3_college)
