@@ -74,13 +74,13 @@ const vigyaanReg = async (req: CustomRequest, res: Response) => {
     return res.status(405).json({ ok: false, message: "No file uploaded." });
   }
 
-  if (data.isNITRR === "Y") {
+  if (data.isNITRR === "Yes") {
     if (!data.Leader_email) {
       return res
         .status(405)
         .json({ ok: false, message: "College email ID is required" });
     }
-  } else if (data.isNITRR === "N") {
+  } else if (data.isNITRR === "No") {
     if (!data.Leader_email || !data.Leader_college) {
       return res
         .status(405)
