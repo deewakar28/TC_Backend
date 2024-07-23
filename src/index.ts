@@ -1,5 +1,5 @@
 import express, { Request, Response, NextFunction } from "express";
-import rateLimit from "express-rate-limit";
+// import rateLimit from "express-rate-limit";
 import cors from "cors";
 import bodyParser from "body-parser";
 import connectToDatabase from "./db/conn";
