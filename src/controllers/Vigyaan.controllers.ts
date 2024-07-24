@@ -119,22 +119,6 @@ const vigyaanReg = async (req: CustomRequest, res: Response) => {
     });
   }
 
-  if (!data.Leader_branch) {
-    return res
-      .status(405)
-      .json({ ok: false, message: "College branch is required" });
-  }
-  if (!data.Member2_branch) {
-    return res
-      .status(405)
-      .json({ ok: false, message: "College branch is required" });
-  }
-  if (!data.Member3_whatsapp && !data.Member3_branch) {
-    return res
-      .status(405)
-      .json({ ok: false, message: "College branch is required" });
-  }
-
   if (!data.Leader_name) {
     return res
       .status(405)
