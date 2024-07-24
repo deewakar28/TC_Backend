@@ -67,7 +67,7 @@ const vigyaanReg = async (req: CustomRequest, res: Response) => {
       .json({ ok: false, message: "Member 2 is already in a team" });
   }
   if (
-    !data.Member3_whatsapp &&
+    data.Member3_whatsapp &&
     !(await check_number_presence(data.Member3_whatsapp))
   ) {
     return res
@@ -88,7 +88,7 @@ const vigyaanReg = async (req: CustomRequest, res: Response) => {
     });
   }
   if (
-    !data.Member3_rollNo &&
+    data.Member3_rollNo &&
     !(await check_rollNo_presence(data.Member3_rollNo))
   ) {
     return res.status(405).json({
@@ -109,78 +109,11 @@ const vigyaanReg = async (req: CustomRequest, res: Response) => {
       message: "Member 2 with given email is already in a team",
     });
   }
-  if (
-    !data.Member3_email &&
-    !(await check_email_presence(data.Member3_email))
-  ) {
+  if (data.Member3_email && !(await check_email_presence(data.Member3_email))) {
     return res.status(405).json({
       ok: false,
       message: "Member 3 with given email is already in a team",
     });
-  }
-
-  if (!data.Leader_name) {
-    return res
-      .status(405)
-      .json({ ok: false, message: "Leader name is required" });
-  }
-  if (!data.Member2_name) {
-    return res
-      .status(405)
-      .json({ ok: false, message: "Member2 name is required" });
-  }
-  if (!data.Member3_whatsapp && !data.Member3_name) {
-    return res
-      .status(405)
-      .json({ ok: false, message: "Member 3 name is required" });
-  }
-
-  if (!data.Leader_year) {
-    return res
-      .status(405)
-      .json({ ok: false, message: "Leader year is required" });
-  }
-  if (!data.Member2_year) {
-    return res
-      .status(405)
-      .json({ ok: false, message: "Member2 year is required" });
-  }
-  if (!data.Member3_whatsapp && !data.Member3_year) {
-    return res
-      .status(405)
-      .json({ ok: false, message: "Member 3 year is required" });
-  }
-
-  if (!data.Leader_rollNo) {
-    return res
-      .status(405)
-      .json({ ok: false, message: "Leader rollNo is required" });
-  }
-  if (!data.Member2_rollNo) {
-    return res
-      .status(405)
-      .json({ ok: false, message: "Member2 rollNo is required" });
-  }
-  if (data.Member3_whatsapp !== undefined && !data.Member3_rollNo) {
-    return res
-      .status(405)
-      .json({ ok: false, message: "Member 3 rollNo is required" });
-  }
-
-  if (!data.Leader_whatsapp) {
-    return res
-      .status(405)
-      .json({ ok: false, message: "Leader whatsapp is required" });
-  }
-  if (!data.Member2_whatsapp) {
-    return res
-      .status(405)
-      .json({ ok: false, message: "Member2 whatsapp is required" });
-  }
-  if (!data.Member3_email && !data.Member3_whatsapp) {
-    return res
-      .status(405)
-      .json({ ok: false, message: "Member 3 whatsapp is required" });
   }
 
   // if (!(await isValidProblem(data.Problem_code))) {
@@ -197,51 +130,17 @@ const vigyaanReg = async (req: CustomRequest, res: Response) => {
   }
 
   if (data.isNITRR === "Yes") {
-    if (!data.Leader_email) {
-      return res
-        .status(405)
-        .json({ ok: false, message: "College email ID is required" });
-    }
-  } else if (data.isNITRR === "No") {
-    if (!data.Leader_email || !data.Leader_college) {
-      return res
-        .status(405)
-        .json({ ok: false, message: "Email and College name are required" });
-    }
-  } else {
-    return res
-      .status(405)
-      .json({ ok: false, message: "Invalid College confirmation choice" });
-  }
-
-  if (data.isNITRR === "Yes") {
-    if (!data.Member2_email) {
-      return res
-        .status(405)
-        .json({ ok: false, message: "College email ID is required" });
-    }
-  } else if (data.isNITRR === "No") {
-    if (!data.Member2_email || !data.Member2_college) {
-      return res
-        .status(405)
-        .json({ ok: false, message: "Email and College name are required" });
-    }
-  } else {
-    return res
-      .status(405)
-      .json({ ok: false, message: "Invalid College confirmation choice" });
-  }
-
-  if (data.isNITRR === "Yes") {
-    if (!data.Member3_whatsapp && !data.Member3_email) {
+    if (!data.Leader_email || !data.Member2_email) {
       return res
         .status(405)
         .json({ ok: false, message: "College email ID is required" });
     }
   } else if (data.isNITRR === "No") {
     if (
-      !data.Member3_whatsapp &&
-      (!data.Member3_email || !data.Member3_college)
+      !data.Leader_email ||
+      !data.Leader_college ||
+      !data.Member2_email ||
+      !data.Member2_college
     ) {
       return res
         .status(405)
