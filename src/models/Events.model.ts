@@ -1,17 +1,12 @@
 import mongoose from "mongoose";
 
-
-
-
-
 const VigyaanProblemCodeSchema = new mongoose.Schema({
-    Code:{
-      type: String,
-      unique: true,
-      trim: true,
-    }
+  Code: {
+    type: String,
+    unique: true,
+    trim: true,
+  },
 });
-
 
 const VigyaanRegisSchema = new mongoose.Schema({
   Team_key: {
@@ -657,7 +652,7 @@ const testSchema = new mongoose.Schema({
   },
   phone: {
     type: Number,
-    unique: true
+    unique: true,
   },
   username: {
     type: String,
@@ -710,13 +705,17 @@ const VigyaanModel = mongoose.model(
   VigyaanRegisSchema,
   "Vigyaan_registration"
 );
-const VigyaanProblemCodeModel  = mongoose.model(
+const VigyaanProblemCodeModel = mongoose.model(
   "VigyaanProblem",
   VigyaanProblemCodeSchema,
   "VigyaanProblemCode"
 );
 
-const TerrainTreaderModel = mongoose.model("TerrainTreader", TerrainTreaderSchema, "TerrainTreader_Registration");
+const TerrainTreaderModel = mongoose.model(
+  "TerrainTreader",
+  TerrainTreaderSchema,
+  "TerrainTreader_Registration"
+);
 
 export {
   RoboSoccerModel,
