@@ -117,9 +117,8 @@ const vigyaanReg = async (req: CustomRequest, res: Response) => {
   } else if (data.isNITRR === "No") {
     if (
       !data.Leader_email ||
-      !data.Leader_college ||
-      !data.Member2_email ||
-      !data.Member2_college
+      !data.College_name ||
+      !data.Member2_email
     ) {
       return res
         .status(405)
