@@ -182,7 +182,9 @@ const vigyaanReg = async (req: CustomRequest, res: Response) => {
     const already = await VigyaanModel.findOne({ Team_key: data.Team_key });
     if (!already) {
       data = Object.fromEntries(
-        Object.entries(data).filter(([_, value]) => value !== "" && value)
+        Object.entries(data).filter(
+          ([_, value]) => value !== "" && value !== null && value !== undefined
+        )
       );
       const newRegistration = new VigyaanModel(data);
       await newRegistration.save();
@@ -196,16 +198,17 @@ const vigyaanReg = async (req: CustomRequest, res: Response) => {
     }
   } catch (err) {
     const error = err as any;
-      if((error.code) === 11000){
-         return res
-         .status(400)
-         .json({ ok: false, message: "All team members must be part of only one team"});
-      }
-      else{
-         return res.
-         status(500)
-         .json({ok:false,message:"An unknown error occured"});
-      }
+    if (error.code === 11000) {
+      return res.status(400).json({
+        ok: false,
+        message: "All team members must be part of only one team",
+        error: err,
+      });
+    } else {
+      return res
+        .status(500)
+        .json({ ok: false, message: "An unknown error occured", error: err });
+    }
   }
 
   // try {
