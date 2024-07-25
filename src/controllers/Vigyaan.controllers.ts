@@ -76,28 +76,6 @@ const vigyaanReg = async (req: CustomRequest, res: Response) => {
       .json({ ok: false, message: "Member 3 is already in a team" });
   }
 
-  if (!(await check_rollNo_presence(data.Leader_rollNo))) {
-    return res.status(405).json({
-      ok: false,
-      message: "Leader with given roll No is already in a team",
-    });
-  }
-  if (!(await check_rollNo_presence(data.Member2_rollNo))) {
-    return res.status(405).json({
-      ok: false,
-      message: "Member 2 with given roll No is already in a team",
-    });
-  }
-  if (
-    data.Member3_rollNo &&
-    !(await check_rollNo_presence(data.Member3_rollNo))
-  ) {
-    return res.status(405).json({
-      ok: false,
-      message: "Member 3 with given roll No is already in a team",
-    });
-  }
-
   if (!(await check_email_presence(data.Leader_email))) {
     return res.status(405).json({
       ok: false,
