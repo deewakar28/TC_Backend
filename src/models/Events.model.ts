@@ -26,6 +26,10 @@ const VigyaanRegisSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
+  College_name: {
+    type: String,
+    trim: true,
+  },
   Leader_name: {
     type: String,
     required: true,
@@ -58,10 +62,6 @@ const VigyaanRegisSchema = new mongoose.Schema({
     unique: true,
     required: true,
   },
-  Leader_college: {
-    type: String,
-    trim: true,
-  },
   Member2_name: {
     type: String,
     required: true,
@@ -88,10 +88,6 @@ const VigyaanRegisSchema = new mongoose.Schema({
     trim: true,
     unique: true,
     required: true,
-  },
-  Member2_college: {
-    type: String,
-    trim: true,
   },
   Member2_rollNo: {
     type: String,
@@ -121,12 +117,7 @@ const VigyaanRegisSchema = new mongoose.Schema({
   Member3_rollNo: {
     type: String,
     trim: true,
-    unique: true,
     sparse: true,
-  },
-  Member3_college: {
-    type: String,
-    trim: true,
   },
   Member3_branch: {
     type: String,
