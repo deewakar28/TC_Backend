@@ -34,7 +34,6 @@ const VigyaanRegisSchema = new mongoose.Schema({
   Leader_rollNo: {
     type: String,
     required: true,
-    unique: true,
     trim: true,
   },
   Leader_branch: {
@@ -97,7 +96,6 @@ const VigyaanRegisSchema = new mongoose.Schema({
   Member2_rollNo: {
     type: String,
     trim: true,
-    unique: true,
     required: true,
   },
   Member3_name: {
