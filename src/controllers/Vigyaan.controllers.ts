@@ -3,6 +3,7 @@ import { CustomRequest } from "..";
 import { Response } from "express";
 import { Bucket } from "@google-cloud/storage";
 import { VigyaanModel, VigyaanProblemCodeModel } from "../models/Events.model";
+import { error } from "console";
 
 async function check_number_presence(number: string) {
   const c1 = await VigyaanModel.findOne({ Leader_whatsapp: number });
@@ -194,9 +195,17 @@ const vigyaanReg = async (req: CustomRequest, res: Response) => {
         .json({ ok: false, message: "The Team name is already taken" });
     }
   } catch (err) {
-    return res
-      .status(500)
-      .json({ ok: false, message: "Internal Server Error", error: err });
+    const error = err as any;
+      if((error.code) === 11000){
+         return res
+         .status(400)
+         .json({ ok: false, message: "All team members must be part of only one team"});
+      }
+      else{
+         return res.
+         status(500)
+         .json({ok:false,message:"An unknown error occured"});
+      }
   }
 
   // try {
