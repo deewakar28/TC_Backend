@@ -108,13 +108,11 @@ const VigyaanRegisSchema = new mongoose.Schema({
     type: String,
     trim: true,
     unique: false,
-    sparse: true,
   },
   Member3_email: {
     type: String,
     trim: true,
     unique: false,
-    sparse: true,
   },
   Member3_year: {
     type: String,
@@ -124,7 +122,6 @@ const VigyaanRegisSchema = new mongoose.Schema({
     type: String,
     trim: true,
     unique: false,
-    sparse: true,
   },
   Member3_college: {
     type: String,
