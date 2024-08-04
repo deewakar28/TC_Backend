@@ -170,7 +170,7 @@ const vigyaanReg = async (req: CustomRequest, res: Response) => {
         .json({ ok: true, message: "Registered Successfully" });
     } else {
       return res
-        .status(200)
+        .status(400)
         .json({ ok: false, message: "The Team name is already taken" });
     }
   } catch (err) {
